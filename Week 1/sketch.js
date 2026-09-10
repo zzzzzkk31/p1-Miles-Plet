@@ -23,9 +23,10 @@ function draw() {
   fill("black");
   strokeWeight(0);
   textSize(16);
-  text("hoi mijn naam is miles", 50, 35);
+  text("1. hoi mijn naam is miles", 50, 35);
 
   // vlag van nederland
+  text("2. vlag van nederland", 50,50)
   fill("red");
   rect(50, 50, 100, 30);
   fill("white");
@@ -34,6 +35,8 @@ function draw() {
   rect(50, 110, 100, 30);
 
   // schaakbord
+  fill("black")
+  text("3. schaakbord", 300, 300)
   strokeWeight(1);
   fill("black");
   rect(300, 300, 50, 50);
@@ -55,6 +58,7 @@ function draw() {
   rect(400, 400, 50, 50);
 
   // transparant huisje
+  text("4. transparant huisje", 600, 550)
   strokeWeight(5);
   noFill();
   stroke("black");
@@ -63,7 +67,9 @@ function draw() {
   line(700, 600, 650, 550);
 
   // stoplicht
+  fill("Black")
   strokeWeight(0);
+  text("5. stoplicht", 900, 275)
   fill(100);
   rect(900, 300, 100, 300);
   fill(0, 255, 0);
@@ -76,6 +82,7 @@ function draw() {
   rect(925, 600, 50, 400);
 
   // dobbelsteen
+  text("6. dobbelsteen", 600 ,300)
   fill("white");
   strokeWeight(1);
   square(600, 300, 100, 20);
@@ -86,6 +93,7 @@ function draw() {
   circle(675, 375, 25);
 
   // mario
+  text("7. mario", 700, 200)
   let palette = {
     0: [0, 0, 0, 0],
     1: [184, 30, 0],
@@ -123,7 +131,7 @@ function draw() {
     }
   }
   // m4a1
-  gun.reset(); // anders stapelen de rotaties op en gaat hij steeds sneller
+  gun.reset(); // anders stapelen de rotaties op en gaat hij steeds sneller net een helikopter(ik ga denk ik een helikopter toevoegen straks)
   gun.background(220);
   gun.ambientLight(150);
   gun.directionalLight(255, 255, 255, -1, 0, -1);
@@ -133,6 +141,7 @@ function draw() {
   image(gun, 1100, 50);
 
   // steve
+  text("8. steve", 1100, 300)
   let stevePalette = {
     1: [75, 48, 30],
     2: [197, 138, 108],
