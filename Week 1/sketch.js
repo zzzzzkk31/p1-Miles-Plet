@@ -1,5 +1,19 @@
+let m4a1;
+let gun;
+let satsuma;
+let auto;
+let mygif;
+
+function preload() {
+  m4a1 = loadModel('M4A1.obj', true);
+  satsuma = loadModel('satsuma.obj', true);
+  mygif = loadImage('mygif.gif');
+}
+
 function setup() {
   createCanvas(1650, 800);
+  gun = createGraphics(400, 400, WEBGL);
+  auto = createGraphics(400, 300, WEBGL);
 }
 
 function draw() {
@@ -41,12 +55,12 @@ function draw() {
   rect(400, 400, 50, 50);
 
   // transparant huisje
-  strokeWeight(5)
-  noFill(1) 
-  color("black")
-  square(600, 600, 100)
-  line(600, 600, 650, 550)
-  line(700, 600, 650, 550)
+  strokeWeight(5);
+  noFill();
+  stroke("black");
+  square(600, 600, 100);
+  line(600, 600, 650, 550);
+  line(700, 600, 650, 550);
 
   // stoplicht
   strokeWeight(0);
@@ -67,40 +81,40 @@ function draw() {
   square(600, 300, 100, 20);
   strokeWeight(0);
   fill("black");
-  circle(650, 350, 35);
+  circle(625, 325, 25);
+  circle(650, 350, 25);
+  circle(675, 375, 25);
 
-  //mario
+  // mario
   let palette = {
-    0: [0, 0, 0, 0],         
-    1: [184, 30, 0],         
-    2: [110, 70, 0],        
-    3: [248, 160, 0],        
-    4: [0, 0, 0]          
+    0: [0, 0, 0, 0],
+    1: [184, 30, 0],
+    2: [110, 70, 0],
+    3: [248, 160, 0],
+    4: [0, 0, 0]
   };
-
   let spriteMap = [
-    [0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0],
-    [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-    [0, 0, 0, 2, 2, 2, 3, 3, 4, 3, 0, 0],
-    [0, 0, 2, 3, 2, 3, 3, 3, 2, 3, 3, 3],
-    [0, 0, 2, 3, 2, 2, 3, 3, 3, 2, 3, 3],
-    [0, 0, 2, 2, 3, 3, 3, 3, 2, 2, 2, 2],
-    [0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 0],
-    [0, 0, 0, 1, 1, 2, 1, 1, 1, 0, 0, 0],
-    [0, 0, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1],
-    [0, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1],
-    [0, 3, 3, 1, 2, 3, 2, 2, 3, 1, 3, 3],
-    [0, 3, 3, 3, 2, 2, 2, 2, 2, 3, 3, 3],
-    [0, 3, 3, 2, 2, 2, 2, 2, 2, 2, 3, 3],
-    [0, 0, 0, 2, 2, 2, 0, 0, 2, 2, 2, 0],
-    [0, 0, 2, 2, 2, 0, 0, 0, 0, 2, 2, 2],
-    [0, 2, 2, 2, 2, 0, 0, 0, 0, 2, 2, 2]
+    [0,0,0,1,1,1,1,1,0,0,0,0],
+    [0,0,0,1,1,1,1,1,1,1,1,0],
+    [0,0,0,2,2,2,3,3,4,3,0,0],
+    [0,0,2,3,2,3,3,3,2,3,3,3],
+    [0,0,2,3,2,2,3,3,3,2,3,3],
+    [0,0,2,2,3,3,3,3,2,2,2,2],
+    [0,0,0,0,3,3,3,3,3,3,3,0],
+    [0,0,0,1,1,2,1,1,1,0,0,0],
+    [0,0,1,1,1,2,1,1,2,1,1,1],
+    [0,1,1,1,1,2,2,2,2,1,1,1],
+    [0,3,3,1,2,3,2,2,3,1,3,3],
+    [0,3,3,3,2,2,2,2,2,3,3,3],
+    [0,3,3,2,2,2,2,2,2,2,3,3],
+    [0,0,0,2,2,2,0,0,2,2,2,0],
+    [0,0,2,2,2,0,0,0,0,2,2,2],
+    [0,2,2,2,2,0,0,0,0,2,2,2]
   ];
   let pixelSize = 10;
-  let marioX = 700;   
-  let marioY = 200;   
-
-  strokeWeight(0); 
+  let marioX = 700;
+  let marioY = 200;
+  strokeWeight(0);
   for (let row = 0; row < spriteMap.length; row++) {
     for (let col = 0; col < spriteMap[row].length; col++) {
       let kleurCode = spriteMap[row][col];
@@ -108,8 +122,17 @@ function draw() {
       square(marioX + (col * pixelSize), marioY + (row * pixelSize), pixelSize);
     }
   }
+  // m4a1
+  gun.reset(); // anders stapelen de rotaties op en gaat hij steeds sneller
+  gun.background(220);
+  gun.ambientLight(150);
+  gun.directionalLight(255, 255, 255, -1, 0, -1);
+  gun.rotateX(PI); // omdraaien zodat het magazijn naar beneden wijst
+  gun.rotateY(frameCount * 0.01);
+  gun.model(m4a1);
+  image(gun, 1100, 50);
 
-  //steve
+  // steve
   let stevePalette = {
     1: [75, 48, 30],
     2: [197, 138, 108],
@@ -117,35 +140,47 @@ function draw() {
     4: [255, 255, 255],
     5: [60, 68, 170]
   };
-
   let steveMap = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1],
-    [1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1],
-    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-    [2, 2, 4, 4, 5, 5, 2, 2, 2, 2, 5, 5, 4, 4, 2, 2],
-    [2, 2, 4, 4, 5, 5, 2, 2, 2, 2, 5, 5, 4, 4, 2, 2],
-    [2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2],
-    [2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2],
-    [2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2],
-    [2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2],
-    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    [1,1,2,2,2,2,2,2,2,2,2,2,2,2,1,1],
+    [1,1,2,2,2,2,2,2,2,2,2,2,2,2,1,1],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,4,4,5,5,2,2,2,2,5,5,4,4,2,2],
+    [2,2,4,4,5,5,2,2,2,2,5,5,4,4,2,2],
+    [2,2,2,2,2,2,3,3,3,3,2,2,2,2,2,2],
+    [2,2,2,2,2,2,3,3,3,3,2,2,2,2,2,2],
+    [2,2,3,3,3,3,3,3,3,3,3,3,3,3,2,2],
+    [2,2,3,3,3,3,3,3,3,3,3,3,3,3,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+    [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
   ];
-
   let steveSize = 10;
   let steveX = 1100;
   let steveY = 300;
-//hallo
   for (let row = 0; row < steveMap.length; row++) {
     for (let col = 0; col < steveMap[row].length; col++) {
       let code = steveMap[row][col];
       fill(stevePalette[code]);
       square(steveX + (col * steveSize), steveY + (row * steveSize), steveSize);
     }
-}
+  }
+
+  // satsuma powerrrrrr (ik weet niet waarom de m4a1 EN de satsuma wireframe zijn ik denk dat dat ligt aan de .obj)
+  image(mygif, width - mygif.width, height - mygif.height);
+
+  auto.reset();
+  auto.clear();
+  auto.strokeWeight(0);
+  auto.ambientLight(150);
+  auto.directionalLight(255, 255, 255, -1, 1, -1);
+  auto.translate(0, 50);
+  auto.rotateX(0);
+  auto.rotateX(PI);
+  auto.rotateY(frameCount * 0.01);
+  auto.model(satsuma);
+  image(auto, width - mygif.width / 2 - auto.width / 2, height - mygif.height - auto.height);
 }
