@@ -140,7 +140,7 @@ function draw() {
   let steveSize = 10;
   let steveX = 1100;
   let steveY = 300;
-
+//hallo
   for (let row = 0; row < steveMap.length; row++) {
     for (let col = 0; col < steveMap[row].length; col++) {
       let code = steveMap[row][col];
