@@ -6,6 +6,7 @@ let skycolor
 let suncolor
 let isDay = true;
 let stars = []
+let cloudGroups = []   
 
 circleX = 100
 circleY = 115
@@ -15,10 +16,13 @@ function setup() {
   canvasx =(1525)
   createCanvas(canvasx, canvasy);
 
-  
+  for (let i = 0; i < 3; i++) {
+  cloudGroups.push(new CloudGroup(random(canvasx), random(50, 200)));
+}
   for (let i = 0; i < 150; i++) {
     stars.push({ x: random(canvasx), y: random(525), size: random(1, 4) })
   }
+  
 }
 function draw() {
   if (isDay) {
@@ -71,14 +75,10 @@ if (circleX > canvasx) {
   triangle(300, 775, 500, 450, 700, 775)
 
 //wolken
-strokeWeight(0)
-fill("white")
-circle(50,50,50)
-circle(60,40,50)
-circle(70,60,50)
-circle(40,70,50)
-circle(70,40,50)
-circle(80,50,50)
+for (let g of cloudGroups) {
+  g.update();
+  g.show();
+}   
 
   //weg
   strokeWeight(1)
@@ -106,8 +106,58 @@ rect(1275,600,150,25,20)
   circle(950, 575, 40);
   fill(100);
   rect(937.5, 600, 25, 200);
-
-
-
-
+  
 }
+class CloudGroup {
+  constructor(x, y) {
+    this.pos = createVector(x, y);
+    this.vel = createVector(random(0.3, 0.7), 0);
+    this.clouds = [];
+    let n = floor(random(4, 8));
+    for (let i = 0; i < n; i++) {
+      this.clouds.push({
+        ox: random(-60, 60),
+        oy: random(-20, 20),
+        puffs: this.makePuffs()
+      });
+    }
+  }
+
+  makePuffs() {
+    let puffs = [];
+    let n = floor(random(4, 8));
+    for (let i = 0; i < n; i++) {
+      puffs.push({
+        ox: random(-20, 20),
+        oy: random(-10, 10),
+        r: random(18, 35)
+      });
+    }
+    return puffs;
+  }
+
+  update() {
+    this.pos.add(this.vel);
+    if (this.pos.x > canvasx + 120) {
+      this.pos.x = -120;
+      for (let c of this.clouds) {
+        c.ox = random(-60, 60);
+        c.oy = random(-20, 20);
+        c.puffs = this.makePuffs();
+      }
+    }
+  }
+
+  show() {
+    for (let c of this.clouds) {
+      push();
+      translate(this.pos.x + c.ox, this.pos.y + c.oy);
+      noStroke();
+      fill(255, 220);
+      for (let p of c.puffs) {
+        circle(p.ox, p.oy, p.r);
+      }
+      pop();
+    }
+  }
+}   
