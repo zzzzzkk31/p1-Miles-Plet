@@ -222,7 +222,10 @@ function draw() {
     if (autoX + autoB <= stopLijn && autoX + autoB + autoSnelheid > stopLijn) {
       autoSnelheid = stopLijn - (autoX + autoB);
     }
-    if (autoX2 + autoB2 <= stopLijn2 && autoX2 + autoB2 + autoSnelheid2 > stopLijn2) {
+    if (
+      autoX2 + autoB2 <= stopLijn2 &&
+      autoX2 + autoB2 + autoSnelheid2 > stopLijn2
+    ) {
       autoSnelheid2 = stopLijn2 - (autoX2 + autoB2);
     }
   }
@@ -282,7 +285,12 @@ function draw() {
   //boom voor de auto
   noStroke();
   fill("#5a3618");
-  rect(voorgrondBoomX, voorgrondBoomY, voorgrondBoomB, canvasy - voorgrondBoomY);
+  rect(
+    voorgrondBoomX,
+    voorgrondBoomY,
+    voorgrondBoomB,
+    canvasy - voorgrondBoomY,
+  );
 
   stroke("#0b3d0b");
   strokeWeight(8);
@@ -290,6 +298,6 @@ function draw() {
   circle(
     voorgrondBoomX + voorgrondBoomB / 2,
     voorgrondBoomKruinY,
-    voorgrondBoomKruinD
+    voorgrondBoomKruinD,
   );
 }
