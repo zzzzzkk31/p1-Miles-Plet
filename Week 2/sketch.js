@@ -4,6 +4,10 @@ let circleX;
 let circleY;
 let skycolor;
 let suncolor;
+let colorA;
+let colorB;
+let mix = 0;
+let speed = 0.1;
 let isDay = true;
 let stars = [];
 let auto1xpositie = -300;
@@ -13,7 +17,7 @@ let timer = 0;
 circleX = 100;
 circleY = 115;
 let circlediameter = 100;
-// Wolk 1
+
 let wolkX1 = 300;
 let wolkY1 = 85;
 let wolkDiameter1 = 70;
@@ -26,7 +30,6 @@ let wolkX3 = 360;
 let wolkY3 = 85;
 let wolkDiameter3 = 70;
 
-// Wolk 2
 let wolkX4 = 500;
 let wolkY4 = 155;
 let wolkDiameter4 = 70;
@@ -83,38 +86,50 @@ function keyPressed() {
 function setup() {
   canvasy = 715;
   canvasx = 1525;
+
   createCanvas(canvasx, canvasy);
 
   for (let i = 0; i < 150; i++) {
     stars.push({ x: random(canvasx), y: random(525), size: random(1, 4) });
   }
 
-  stoplichtRood = color("#930101");
-  stoplichtOranje = color("#b38900");
+  stoplichtRood = color("#ff0000");
+  stoplichtOranje = color("#b34b00");
   stoplichtGroen = color("#48ff00");
+
+  colorA = color("lightblue");
+  colorB = color("darkblue");
 }
+//sterren en zon
 function draw() {
+  let progress = map(circleX, 100, canvasx, 0, 1);
+
   if (isDay) {
-    skycolor = "lightblue";
+    skycolor = lerpColor(colorA, colorB, progress);
     suncolor = "yellow";
   } else {
-    skycolor = "darkblue";
+    skycolor = lerpColor(colorB, colorA, progress);
     suncolor = "white";
   }
-  background("0");
+
+  background(0);
   fill(skycolor);
   rect(0, 0, canvasx, canvasy);
 
-  //sterren
-  if (!isDay) {
-    noStroke();
-    for (let star of stars) {
-      fill(255, random(150, 255));
-      circle(star.x, star.y, star.size);
-    }
+  let starAlpha;
+  if (isDay) {
+    starAlpha = map(progress, 0, 1, 0, 255);
+  } else {
+    starAlpha = map(progress, 0, 1, 255, 0);
   }
 
-  //zon
+  noStroke();
+  for (let star of stars) {
+    let currentAlpha = map(starAlpha, 0, 255, 0, random(150, 255));
+    fill(255, currentAlpha);
+    circle(star.x, star.y, star.size);
+  }
+
   circleX = circleX + 0.5;
 
   noStroke();
@@ -132,16 +147,14 @@ function draw() {
     circleX = 100;
     isDay = !isDay;
   }
-
-  // bergen
+  //bergen
   strokeWeight(1);
   stroke("grey");
   fill(100);
   triangle(30, 775, 258, 250, 500, 775);
   triangle(500, 775, 700, 350, 900, 775);
   triangle(300, 775, 500, 450, 700, 775);
-
-  // wolken
+  //wolken
   strokeWeight(0);
   fill("#ffffff");
   circle(wolkX1, wolkY1, wolkDiameter1);
@@ -174,8 +187,7 @@ function draw() {
       wolkX6 = canvasx + 160;
     }
   }
-
-  //gras met bomen
+  //bomen
   noStroke();
   fill("#3faa3f");
   rect(0, 475, canvasx, 50);
@@ -195,7 +207,6 @@ function draw() {
   circle(1210, 415, 110);
   stroke("grey");
 
-  //weg
   strokeWeight(1);
   fill(70);
   rect(0, 525, 1525, 250);
@@ -209,7 +220,6 @@ function draw() {
   rect(1100, 600, 150, 25, 20);
   rect(1275, 600, 150, 25, 20);
 
-  //autos stoppen voor het stoplicht
   autoSnelheid = autoSnelheidNormaal;
   autoSnelheid2 = autoSnelheidNormaal2;
 
@@ -217,7 +227,7 @@ function draw() {
     autoSnelheid = autoSnelheidLangzaam;
     autoSnelheid2 = autoSnelheidLangzaam2;
   }
-
+  //stoplicht en autos
   if (stoplichtStand === "rood") {
     if (autoX + autoB <= stopLijn && autoX + autoB + autoSnelheid > stopLijn) {
       autoSnelheid = stopLijn - (autoX + autoB);
@@ -229,7 +239,6 @@ function draw() {
       autoSnelheid2 = stopLijn2 - (autoX2 + autoB2);
     }
   }
-
   //autos
   stroke(0);
   strokeWeight(1);
@@ -254,8 +263,7 @@ function draw() {
   if (autoX2 > canvasx) {
     autoX2 = -450;
   }
-
-  //stoplicht
+  //stoplicht stand
   if (stoplichtStand === "rood") {
     stoplichtRood = color("#ff0000");
     stoplichtOranje = color("#b38900");
@@ -269,7 +277,7 @@ function draw() {
     stoplichtOranje = color("#b38900");
     stoplichtGroen = color("#48ff00");
   }
-
+  //stoplicht zien
   strokeWeight(0);
   fill(100);
   rect(925, 450, 50, 150);
@@ -282,7 +290,6 @@ function draw() {
   fill(100);
   rect(937.5, 600, 25, 200);
 
-  //boom voor de auto
   noStroke();
   fill("#5a3618");
   rect(
