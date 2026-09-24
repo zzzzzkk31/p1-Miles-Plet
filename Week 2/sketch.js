@@ -14,7 +14,7 @@ let auto1xpositie = -300;
 let richtingAuto1 = 3;
 let timer = 0;
 
-circleX = 100;
+circleX = -100;
 circleY = 115;
 let circlediameter = 100;
 
@@ -100,9 +100,12 @@ function setup() {
   colorA = color("lightblue");
   colorB = color("darkblue");
 }
-//sterren en zon
 function draw() {
-  let progress = map(circleX, 100, canvasx, 0, 1);
+  let progress = map(circleX, -100, canvasx + 100, 0, 1);
+
+  let angle = map(circleX, -100, canvasx + 100, PI, 0);
+  
+  circleY = 550 - sin(angle) * 450;
 
   if (isDay) {
     skycolor = lerpColor(colorA, colorB, progress);
@@ -130,7 +133,7 @@ function draw() {
     circle(star.x, star.y, star.size);
   }
 
-  circleX = circleX + 0.5;
+  circleX = circleX + 1.7; 
 
   noStroke();
   let glow = color(suncolor);
@@ -143,10 +146,11 @@ function draw() {
   fill(suncolor);
   circle(circleX, circleY, circlediameter);
 
-  if (circleX > canvasx) {
-    circleX = 100;
-    isDay = !isDay;
+  if (circleX > canvasx + 100) {
+    circleX = -100; 
+    isDay = !isDay; 
   }
+  
   //bergen
   strokeWeight(1);
   stroke("grey");
