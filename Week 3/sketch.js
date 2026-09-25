@@ -1,5 +1,6 @@
+
 // Spel variablene
-let beurt = "red";
+let beurt = "";
 let gameOver = false;
 let gelijkspel = false
 
@@ -8,9 +9,14 @@ let maxTijd = 5;
 let startTijd = 0;
 let overigeTijd = 5;
 
-// Cursor kleur
-let cursorBlue = ("blue")
-let cursorRed = ("red")
+// Kleur selectie
+let kleurKiezen = true;
+let kiezendeSpeler = 1;
+let speler1Kleur = "";
+let speler2Kleur = "";
+let kleuren = ["red", "blue", "green", "orange", "purple", "hotpink"];
+let kleurVakGrootte = 40;
+let kleurVakY = 200;
 
 // Vakjes variabelen
 let rectW = 80;
@@ -38,16 +44,20 @@ let vak7X = 50;  let vak7Y = 250;
 let vak8X = 150; let vak8Y = 250;
 let vak9X = 250; let vak9Y = 250;
 
+// Win streep
+let lijnStartX = 0; let lijnStartY = 0;
+let lijnEindX = 0;  let lijnEindY = 0;
+
 // Play again knop
 let playAgainX = 135;
 let playAgainY = 345;
 let playAgainH = 40;
 let playAgainW = 120;
-let playAgainText = "Play again";
+let playAgainText = "opnieuw";
 
 // Beurt tekst
-let redsTurn = ("Reds turn");
-let bluesTurn = ("Blue's turn");
+let speler1Beurt = ("speler 1 is aan zet");
+let speler2Beurt = ("speler 2 is aan zet");
 
 // Geluiden
 let klikGeluid;
@@ -62,7 +72,7 @@ function setup() {
   createCanvas(400, 400);
 
   // Geluid laden in setup, zodat het spel niet blijft hangen als het bestand ontbreekt
-  klikGeluid = loadSound('../sounds/klik.mp3');
+  klikGeluid = loadSound("klik.ogg");
 }
 
 // Speel het klik geluid alleen af als het geladen is
@@ -70,7 +80,18 @@ function speelKlik() {
   if (klikGeluid && klikGeluid.isLoaded()) {
     klikGeluid.play();
   }
-} 
+}
+
+// Tekent een vakje en maakt het groter als je erover hovert en het nog vrij is
+function tekenVak(x, y, kleur) {
+  if (mouseX > x && mouseX < x + rectW && mouseY > y && mouseY < y + rectH && kleur == "grey" && gameOver == false) {
+    fill(lerpColor(color("grey"), color(beurt), 0.4));
+    rect(x - 5, y - 5, rectW + 10, rectH + 10, 10);
+  } else {
+    fill(kleur);
+    rect(x, y, rectW, rectH, 10);
+  }
+}
 
 function draw() {
   background(220);
@@ -78,35 +99,69 @@ function draw() {
   // Achtergrond
   image(img, 0, 0, 400, 400);
 
+  // Kleur selectie scherm voordat het spel begint
+  if (kleurKiezen == true) {
+    noStroke();
+    fill(0, 150);
+    rect(0, 0, 400, 400);
+
+    textSize(26);
+    fill(255);
+    stroke(0);
+    strokeWeight(5);
+    text("speler " + kiezendeSpeler + " kies een kleur", 55, 150);
+
+    for (let i = 0; i < kleuren.length; i++) {
+      let x = 30 + i * 60;
+
+      // De kleur van speler 1 is doorzichtig want die kan speler 2 niet meer kiezen
+      let vakKleur = color(kleuren[i]);
+      if (kleuren[i] == speler1Kleur) {
+        vakKleur.setAlpha(50);
+      }
+
+      fill(vakKleur);
+      stroke(255);
+      strokeWeight(3);
+      rect(x, kleurVakY, kleurVakGrootte, kleurVakGrootte, 10);
+    }
+    return;
+  }
+
+  // Achtergrond krijgt de kleur van wie er aan de beurt is
+  let achtergrondKleur = color(beurt);
+  achtergrondKleur.setAlpha(90);
+  noStroke();
+  fill(achtergrondKleur);
+  rect(0, 0, 400, 400);
+
   // Vakjes tekenen
   strokeWeight(5);
   stroke(150)
-  fill(vak1Kleur);
-  rect(vak1X, vak1Y, rectW, rectH, 10);
+  tekenVak(vak1X, vak1Y, vak1Kleur);
+  tekenVak(vak2X, vak2Y, vak2Kleur);
+  tekenVak(vak3X, vak3Y, vak3Kleur);
+  tekenVak(vak4X, vak4Y, vak4Kleur);
+  tekenVak(vak5X, vak5Y, vak5Kleur);
+  tekenVak(vak6X, vak6Y, vak6Kleur);
+  tekenVak(vak7X, vak7Y, vak7Kleur);
+  tekenVak(vak8X, vak8Y, vak8Kleur);
+  tekenVak(vak9X, vak9Y, vak9Kleur);
 
-  fill(vak2Kleur);
-  rect(vak2X, vak2Y, rectW, rectH, 10);
+  // Streep door het midden van de winnende vakjes
+  if (gameOver == true && gelijkspel == false) {
+    let startX = lijnStartX + rectW / 2;
+    let startY = lijnStartY + rectH / 2;
+    let eindX = lijnEindX + rectW / 2;
+    let eindY = lijnEindY + rectH / 2;
 
-  fill(vak3Kleur);
-  rect(vak3X, vak3Y, rectW, rectH, 10);
-
-  fill(vak4Kleur);
-  rect(vak4X, vak4Y, rectW, rectH, 10);
-
-  fill(vak5Kleur);
-  rect(vak5X, vak5Y, rectW, rectH, 10);
-
-  fill(vak6Kleur);
-  rect(vak6X, vak6Y, rectW, rectH, 10);
-
-  fill(vak7Kleur);
-  rect(vak7X, vak7Y, rectW, rectH, 10);
-
-  fill(vak8Kleur);
-  rect(vak8X, vak8Y, rectW, rectH, 10);
-
-  fill(vak9Kleur);
-  rect(vak9X, vak9Y, rectW, rectH, 10);
+    stroke(255);
+    strokeWeight(14);
+    line(startX, startY, eindX, eindY);
+    stroke(0);
+    strokeWeight(6);
+    line(startX, startY, eindX, eindY);
+  }
 
   // Teken de timer
   fill(255)
@@ -117,12 +172,12 @@ function draw() {
   if (gameOver == false) {
     let verstreken = (millis() - startTijd) / 1000
     overigeTijd = ceil (maxTijd - verstreken)
-    
+
     if (overigeTijd <= 0) {
-      if (beurt == "red") {
-        beurt = "blue";
+      if (beurt == speler1Kleur) {
+        beurt = speler2Kleur;
       } else {
-        beurt = "red";
+        beurt = speler1Kleur;
       }
       startTijd = millis()
     }
@@ -132,13 +187,13 @@ if (gameOver == true) {
   textSize(30);
   fill(255);
   stroke(10);
-  
+
   // Check of het gelijkspel was of dat iemand gewonnen heeft
   if (gelijkspel == true) {
-    text("Draw!", 160, 35);
+    text("gelijkspel", 125, 35);
     stroke("black")
   } else {
-    text("Game finished", 100, 35);
+    text("spel afgelopen", 95, 35);
   }
 
   // Play again knop
@@ -148,59 +203,64 @@ if (gameOver == true) {
   fill("white");
   textSize(20);
   stroke(0);
-  text(playAgainText, 150, 370);
+  text(playAgainText, 160, 370);
 
   overigeTijd = "";
 }
 
   // Laat zien welke speler aan de beurt is
-  if (beurt == "red") {
+  if (gameOver == false) {
     textSize(30)
     fill(255)
     stroke(10)
-    text(redsTurn, 130, 35)
-
-    strokeWeight(3);
-    stroke(0)
-    fill(cursorRed);
-    stroke("#ff7070")
-    circle(mouseX, mouseY, 15);
-
-  } else {
-    textSize(30)
-    fill(255)
-    stroke(10)
-    text(bluesTurn, 130, 35)
-    
-    strokeWeight(3);
-    stroke("#4659ff")
-    fill(cursorBlue);
-    circle(mouseX, mouseY, 15);
+    if (beurt == speler1Kleur) {
+      text(speler1Beurt, 65, 35)
+    } else {
+      text(speler2Beurt, 65, 35)
+    }
   }
 
-  stroke(0)
-
-
-  if (gameOver == true) {
-    redsTurn = ("");
-    bluesTurn = ("");
-
-    stroke("#37ff00")
-  }
-
-  if (gelijkspel == true) {
-    stroke(0)
-  }
+  // Cursor in de kleur van wie er aan de beurt is
+  strokeWeight(3);
+  stroke(255);
+  fill(beurt);
+  circle(mouseX, mouseY, 15);
 }
 
 function mousePressed(){
+
+  // Kleur kiezen waarbij speler 2 niet dezelfde kleur als speler 1 kan kiezen
+  if (kleurKiezen == true) {
+    for (let i = 0; i < kleuren.length; i++) {
+      let x = 30 + i * 60;
+
+      if (
+        mouseX > x && mouseX < x + kleurVakGrootte &&
+        mouseY > kleurVakY && mouseY < kleurVakY + kleurVakGrootte &&
+        kleuren[i] != speler1Kleur
+      ) {
+        if (kiezendeSpeler == 1) {
+          speler1Kleur = kleuren[i];
+          kiezendeSpeler = 2;
+        } else {
+          speler2Kleur = kleuren[i];
+          kleurKiezen = false;
+          beurt = speler1Kleur;
+          startTijd = millis();
+        }
+        speelKlik();
+        return;
+      }
+    }
+    return;
+  }
 
   if (gameOver == true) {
     if (
       mouseX > playAgainX && mouseX < playAgainX + playAgainW &&
       mouseY > playAgainY && mouseY < playAgainY + playAgainH
     ) {
-      resetGame(); 
+      resetGame();
       return;
     }
     return;
@@ -277,31 +337,52 @@ function mousePressed(){
   }
 
   // Alle mogelijke combinaties die er zijn gebruiken om het spel te spelen
-if (
-  (vak1Kleur != "grey" && vak1Kleur == vak2Kleur && vak2Kleur == vak3Kleur) || 
-  (vak4Kleur != "grey" && vak4Kleur == vak5Kleur && vak5Kleur == vak6Kleur) || 
-  (vak7Kleur != "grey" && vak7Kleur == vak8Kleur && vak8Kleur == vak9Kleur) || 
-  
-  (vak1Kleur != "grey" && vak1Kleur == vak4Kleur && vak4Kleur == vak7Kleur) || 
-  (vak2Kleur != "grey" && vak2Kleur == vak5Kleur && vak5Kleur == vak8Kleur) || 
-  (vak3Kleur != "grey" && vak3Kleur == vak6Kleur && vak6Kleur == vak9Kleur) || 
-  
-  (vak1Kleur != "grey" && vak1Kleur == vak5Kleur && vak5Kleur == vak9Kleur) || 
-  (vak3Kleur != "grey" && vak3Kleur == vak5Kleur && vak5Kleur == vak7Kleur) 
-) {
-  gameOver = true;
-}
+  // Bij een winst onthouden we het eerste en laatste vakje voor de streep
+  if (vak1Kleur != "grey" && vak1Kleur == vak2Kleur && vak2Kleur == vak3Kleur) {
+    gameOver = true;
+    lijnStartX = vak1X; lijnStartY = vak1Y; lijnEindX = vak3X; lijnEindY = vak3Y;
+  }
+  if (vak4Kleur != "grey" && vak4Kleur == vak5Kleur && vak5Kleur == vak6Kleur) {
+    gameOver = true;
+    lijnStartX = vak4X; lijnStartY = vak4Y; lijnEindX = vak6X; lijnEindY = vak6Y;
+  }
+  if (vak7Kleur != "grey" && vak7Kleur == vak8Kleur && vak8Kleur == vak9Kleur) {
+    gameOver = true;
+    lijnStartX = vak7X; lijnStartY = vak7Y; lijnEindX = vak9X; lijnEindY = vak9Y;
+  }
+
+  if (vak1Kleur != "grey" && vak1Kleur == vak4Kleur && vak4Kleur == vak7Kleur) {
+    gameOver = true;
+    lijnStartX = vak1X; lijnStartY = vak1Y; lijnEindX = vak7X; lijnEindY = vak7Y;
+  }
+  if (vak2Kleur != "grey" && vak2Kleur == vak5Kleur && vak5Kleur == vak8Kleur) {
+    gameOver = true;
+    lijnStartX = vak2X; lijnStartY = vak2Y; lijnEindX = vak8X; lijnEindY = vak8Y;
+  }
+  if (vak3Kleur != "grey" && vak3Kleur == vak6Kleur && vak6Kleur == vak9Kleur) {
+    gameOver = true;
+    lijnStartX = vak3X; lijnStartY = vak3Y; lijnEindX = vak9X; lijnEindY = vak9Y;
+  }
+
+  if (vak1Kleur != "grey" && vak1Kleur == vak5Kleur && vak5Kleur == vak9Kleur) {
+    gameOver = true;
+    lijnStartX = vak1X; lijnStartY = vak1Y; lijnEindX = vak9X; lijnEindY = vak9Y;
+  }
+  if (vak3Kleur != "grey" && vak3Kleur == vak5Kleur && vak5Kleur == vak7Kleur) {
+    gameOver = true;
+    lijnStartX = vak3X; lijnStartY = vak3Y; lijnEindX = vak7X; lijnEindY = vak7Y;
+  }
 
 // Gelijkspel
 if (
-  vak1Kleur != "grey" && 
-  vak2Kleur != "grey" && 
-  vak3Kleur != "grey" && 
-  vak4Kleur != "grey" && 
-  vak5Kleur != "grey" && 
-  vak6Kleur != "grey" && 
-  vak7Kleur != "grey" && 
-  vak8Kleur != "grey" && 
+  vak1Kleur != "grey" &&
+  vak2Kleur != "grey" &&
+  vak3Kleur != "grey" &&
+  vak4Kleur != "grey" &&
+  vak5Kleur != "grey" &&
+  vak6Kleur != "grey" &&
+  vak7Kleur != "grey" &&
+  vak8Kleur != "grey" &&
   vak9Kleur != "grey"
 ) {
   if (gameOver == false) {
@@ -310,13 +391,16 @@ if (
   }
 }
 
+  // Bij winst blijft de achtergrond in de kleur van de winnaar
+  if (gameOver == true && gelijkspel == false) {
+    return;
+  }
+
 // Wissel de beurt om elke keer dat er op een vakje word gedrukt
-  if (beurt == "red") {
-    beurt = "blue";
-    text("Blue's turn", 150, 30)
+  if (beurt == speler1Kleur) {
+    beurt = speler2Kleur;
   } else {
-    beurt = "red";
-    text("Reds turn", 150, 30)
+    beurt = speler1Kleur;
   }
 
 
@@ -342,10 +426,7 @@ function resetGame(){
   gameOver = false;
   gelijkspel = false
 
-  beurt = "red";
-
-  redsTurn = ("Reds turn")
-  bluesTurn = ("Blue's turn")
+  beurt = speler1Kleur;
 
   startTijd = millis();
 }
