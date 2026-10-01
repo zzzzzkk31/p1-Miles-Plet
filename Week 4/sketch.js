@@ -14,13 +14,13 @@ function setup() {
 
 function draw() {
   // achtergrond hue die langzaam door de kleuren draait
-  let achtergrondHue = (frameCount * 1) % 360;
+  let achtergrondHue = (frameCount * 10) % 360;
   background(achtergrondHue, 60, 15);
 
   // licht aan anders zie je 3d vormen niet goed
   lights();
 
-  // camera langzaam laten draaien voor acid trip effect
+  // camera langzaam laten draaien voor crazy rainbow effect
   rotateY(frameCount * 0.003);
   rotateX(sin(frameCount * 0.01) * 0.3);
 
@@ -73,7 +73,7 @@ function genereerWereld() {
   vormen = [];
 
   // willekeurig aantal vormen
-  let aantal = floor(random(20, 50));
+  let aantal = floor(random(50, 500));
 
   for (let i = 0; i < aantal; i++) {
     // een nieuwe vorm met willekeurige eigenschappen toevoegen
@@ -83,7 +83,7 @@ function genereerWereld() {
       z: random(-600, 600),
       maat: random(30, 120),
       hue: random(360),
-      hueSnelheid: random(1, 3),
+      hueSnelheid: random(10, 100),
       hoek: random(TWO_PI),
       rotatiesnelheid: random(0.01, 0.05),
       zweefsnelheid: random(0.01, 0.04),
