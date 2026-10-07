@@ -1,7 +1,5 @@
 //tank quiz
 // je krijgt een vraag met een plaatje en 4 antwoorden
-// bij vragen over pantser of munitie zie je na het antwoord een animatie van wat er gebeurt
-// zwarte lijn = het pantser, zwarte bal = de kogel
 // na de gewone vragen kun je nog de hard mode doen voor extra punten
 
 // array met alle vragen, elke vraag is een data-object
@@ -10,10 +8,6 @@
 // antwoorden = array met de 4 antwoorden
 // goedAntwoord = welk antwoord goed is (0 is de eerste, 3 is de laatste)
 // uitleg = tekst die je ziet na je antwoord
-// animatie = wat de bal doet: "door", "stopt", "afketsen" of "kooi"
-//            of "geen": dan zie je bij de uitleg gewoon het plaatje
-// dikte = hoe dik het pantser (de lijn) is (alleen nodig met een animatie)
-// snelheid = hoe snel de bal gaat (alleen nodig met een animatie)
 let vragen = [
   {
     vraag:
@@ -28,9 +22,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "Gewone geweerkogels kwamen niet door het staal heen. Tegen een kanon had de Mark I bijna geen kans.",
-    animatie: "stopt",
-    dikte: 3,
-    snelheid: 3,
   },
   {
     vraag:
@@ -45,7 +36,6 @@ let vragen = [
     goedAntwoord: 2,
     uitleg:
       "Het kleine wiel achteraan zakte meteen vast in de zachte grond. Ze kregen hem er niet meer uit, dus bleef hij jaren in het bos staan tot hij gesloopt werd.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -60,7 +50,6 @@ let vragen = [
     goedAntwoord: 0,
     uitleg:
       "De Renault FT was de eerste tank met een toren die helemaal rond kon draaien. Zo kon hij alle kanten op schieten zonder de hele tank te draaien. Er zaten maar 2 mensen in.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -70,7 +59,6 @@ let vragen = [
     goedAntwoord: 2,
     uitleg:
       "12 man! Hij was 10 meter lang en woog 69 ton. Er werden er maar 10 gemaakt en ze hebben nooit echt gevochten.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -80,7 +68,6 @@ let vragen = [
     goedAntwoord: 2,
     uitleg:
       "5 torens en 11 man bemanning! Maar zijn pantser was dun en hij ging steeds kapot. De meeste T-35's zijn in 1941 achtergelaten omdat ze niet meer reden.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -95,7 +82,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "Het was een Caterpillar tractor met staalplaten eromheen en overal machinegeweren. Hij was traag, wiebelde heel erg en er werden er maar 3 gemaakt. Gevochten heeft hij nooit.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -110,9 +96,6 @@ let vragen = [
     goedAntwoord: 0,
     uitleg:
       "In Noord-Afrika kregen de Italianen hem bijna niet kapot. Hij kreeg de bijnaam 'Koningin van het slagveld'. Wel was hij heel langzaam.",
-    animatie: "stopt",
-    dikte: 10,
-    snelheid: 3,
   },
   {
     vraag:
@@ -127,7 +110,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "De toren woog zo veel dat hij op een schuine helling bijna niet rond kon. Maar zijn pantser was dik, en als zijn enorme granaat iets raakte, bleef er niet veel van over.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -142,9 +124,6 @@ let vragen = [
     goedAntwoord: 3,
     uitleg:
       "Op een schuine plaat glijdt de granaat weg en ketst hij af. En als hij er wel in gaat, moet hij schuin door meer staal heen.",
-    animatie: "afketsen",
-    dikte: 6,
-    snelheid: 4,
   },
   {
     vraag:
@@ -159,9 +138,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "Het kanon was eigenlijk gemaakt om met een boog over dingen heen te schieten, niet tegen tanks. De granaten waren te langzaam. Er zijn er maar 18 gemaakt.",
-    animatie: "stopt",
-    dikte: 8,
-    snelheid: 1.5,
   },
   {
     vraag:
@@ -176,7 +152,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "Een vliegtuig trok hem de lucht in en dan moest hij zweven en landen. Hij was zo zwaar dat ze er bijna alles uit moesten halen. Hij heeft maar 1 keer gevlogen.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -191,7 +166,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "Hij was een rijdende bom die je met een lange kabel bestuurde. Maar hij was langzaam, zijn pantser was heel dun en als je de kabel kapot schoot deed hij niks meer.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -206,7 +180,6 @@ let vragen = [
     goedAntwoord: 0,
     uitleg:
       "De Amerikanen hadden haast en nog geen toren voor het grote kanon. Daarom kwam het in de zijkant en kon het bijna alleen naar voren schieten. En de tank was heel hoog, dus makkelijk te raken.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -221,9 +194,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "Het dikste pantser zit voorop, want daar wordt een tank het meest op beschoten. De zijkant is dunner, anders wordt de tank veel te zwaar.",
-    animatie: "door",
-    dikte: 3,
-    snelheid: 4,
   },
   {
     vraag:
@@ -238,7 +208,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "Het voorste stuk van de loop werd zo geverfd dat het van ver bijna onzichtbaar was. Dan leek de Firefly op een gewone Sherman met een kort kanon.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -253,9 +222,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "Het kanon van de Sherman was niet sterk genoeg voor 100mm staal. Shermans probeerden de Tiger daarom van opzij of van achteren te raken.",
-    animatie: "stopt",
-    dikte: 12,
-    snelheid: 4,
   },
   {
     vraag:
@@ -265,9 +231,6 @@ let vragen = [
     goedAntwoord: 2,
     uitleg:
       "Omdat de plaat zo schuin staat, moet een granaat er schuin doorheen. Dat is net zoveel staal als ongeveer 140mm recht pantser. En vaak ketste de granaat gewoon af.",
-    animatie: "afketsen",
-    dikte: 6,
-    snelheid: 4,
   },
   {
     vraag:
@@ -282,7 +245,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "De motor was eigenlijk te zwak voor 68 ton. Veel Tiger II's moesten worden achtergelaten omdat ze kapot waren of geen brandstof meer hadden.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -297,7 +259,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "Met zijn grote kanon kon hij tanks van ver kapot schieten, maar tegen soldaten van dichtbij kon hij niks doen. Later kreeg hij er alsnog een machinegeweer bij.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -307,7 +268,6 @@ let vragen = [
     goedAntwoord: 2,
     uitleg:
       "188 ton, zo zwaar als ongeveer 130 auto's! Bruggen konden hem niet houden, dus het plan was om onder water door rivieren te rijden. Er zijn er maar 2 gemaakt.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -322,7 +282,6 @@ let vragen = [
     goedAntwoord: 2,
     uitleg:
       "Hij is na de oorlog gevonden en niemand weet precies wat hij moest doen. Waarschijnlijk was hij om dingen te verkennen. Zijn pantser was maar 5mm dik.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -337,7 +296,6 @@ let vragen = [
     goedAntwoord: 2,
     uitleg:
       "Tussen de 86.000 en 100.000! Ze werden in heel veel landen gebruikt en sommige rijden nu nog steeds rond.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -352,7 +310,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "Het kanon zit vast in de tank. Hij draait met zijn rupsbanden en kantelt zichzelf om te richten. Zonder toren is hij heel laag en dus moeilijk te zien en te raken.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -367,9 +324,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "De automatische lader heeft alle granaten in een ring onder de toren. Gaat een granaat door het pantser en raakt hij die munitie, dan ontploft alles en wordt de toren weggeblazen.",
-    animatie: "door",
-    dikte: 6,
-    snelheid: 6,
   },
   {
     vraag:
@@ -384,9 +338,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "Een granaat die van voren komt moet eerst door het pantser en dan nog door de motor. De bemanning zit erachter en is veiliger. Achterin zit zelfs een deur waar soldaten in kunnen.",
-    animatie: "stopt",
-    dikte: 12,
-    snelheid: 4,
   },
   {
     vraag:
@@ -401,9 +352,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "Dat heet reactief pantser (ERA). Als een granaat zo'n blok raakt, ontploft het naar buiten en maakt het de granaat kapot voordat hij bij het echte pantser is.",
-    animatie: "stopt",
-    dikte: 10,
-    snelheid: 4,
   },
   {
     vraag:
@@ -418,7 +366,6 @@ let vragen = [
     goedAntwoord: 1,
     uitleg:
       "Sinds de Centurion uit 1945 heeft elke Britse tank een 'boiling vessel'. Daarmee zet je thee en warm je eten op zonder dat je de tank uit hoeft.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -433,9 +380,6 @@ let vragen = [
     goedAntwoord: 3,
     uitleg:
       "Ongeveer 1700 meter per seconde: meer dan 5 keer zo snel als geluid! Door die enorme snelheid gaat hij door heel dik pantser.",
-    animatie: "door",
-    dikte: 10,
-    snelheid: 12,
   },
   {
     vraag:
@@ -450,9 +394,6 @@ let vragen = [
     goedAntwoord: 2,
     uitleg:
       "Denk aan een punaise: met een scherpe punt druk je hem zo in hout. Zo werkt de pijl ook: alle kracht op een klein puntje.",
-    animatie: "door",
-    dikte: 10,
-    snelheid: 10,
   },
   {
     vraag:
@@ -467,9 +408,6 @@ let vragen = [
     goedAntwoord: 3,
     uitleg:
       "Een RPG raket raakt eerst de staven. Daardoor gaat hij kapot of ontploft hij te vroeg. Het echte pantser erachter blijft heel.",
-    animatie: "kooi",
-    dikte: 6,
-    snelheid: 4,
   },
 ];
 
@@ -488,7 +426,6 @@ let hardVragen = [
     goedAntwoord: 1,
     uitleg:
       "De Britten deden alsof ze watertanks aan het bouwen waren, zodat spionnen niet wisten dat het een gevechtsvoertuig was. De naam 'tank' bleef daarna gewoon hangen.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -503,7 +440,6 @@ let hardVragen = [
     goedAntwoord: 1,
     uitleg:
       "Dit is een Sherman DD (Duplex Drive). Het doek werd omhoog gezet zodat de tank als een boot dreef, en 2 schroeven duwden hem vooruit. Bij Omaha Beach zonken er veel door de hoge golven.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -513,7 +449,6 @@ let hardVragen = [
     goedAntwoord: 1,
     uitleg:
       "Maar 20! Op 24 april 1918 vocht een A7V bij Villers-Bretonneux tegen een Britse Mark IV: het allereerste gevecht van tank tegen tank.",
-    animatie: "geen",
   },
   {
     vraag: "Wat trok de Britse Churchill Crocodile achter zich aan?",
@@ -527,7 +462,6 @@ let hardVragen = [
     goedAntwoord: 1,
     uitleg:
       "De Crocodile was een vlammenwerper-tank. In de aanhanger zat ongeveer 1800 liter brandstof, en hij kon tot ongeveer 110 meter ver vuur spuiten.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -542,9 +476,6 @@ let hardVragen = [
     goedAntwoord: 1,
     uitleg:
       "De dunne platen vingen de kogels van Sovjet antitankgeweren op of lieten ze kantelen, zodat ze niet meer door het dunne pantser van de zijkant kwamen.",
-    animatie: "kooi",
-    dikte: 4,
-    snelheid: 5,
   },
   {
     vraag:
@@ -559,9 +490,6 @@ let hardVragen = [
     goedAntwoord: 1,
     uitleg:
       "Achter op de tank zat een kleine kraan om de granaten op te tillen. Er pasten er maar 14 in. Een gebouw of bunker hield zo'n granaat bijna niet tegen.",
-    animatie: "door",
-    dikte: 12,
-    snelheid: 2,
   },
   {
     vraag: "De Japanse Type 2 Ka-Mi kon zwemmen. Hoe deed hij dat?",
@@ -575,7 +503,6 @@ let hardVragen = [
     goedAntwoord: 0,
     uitleg:
       "Aan de voorkant en achterkant zaten holle drijvers. Op het strand werden ze losgemaakt en dan reed hij verder als een gewone tank.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -585,9 +512,6 @@ let hardVragen = [
     goedAntwoord: 1,
     uitleg:
       "Sabot betekent klomp. De 'klomp' houdt de dunne pijl op zijn plek in de dikke loop en valt eraf zodra hij uit de loop is. Dan vliegt alleen de pijl verder.",
-    animatie: "door",
-    dikte: 10,
-    snelheid: 12,
   },
   {
     vraag:
@@ -602,9 +526,6 @@ let hardVragen = [
     goedAntwoord: 1,
     uitleg:
       "Veel mensen denken dat hij smelt, maar HEAT betekent High Explosive Anti-Tank. De straal gaat zo snel dat het staal zich als een vloeistof gedraagt en opzij geduwd wordt.",
-    animatie: "door",
-    dikte: 8,
-    snelheid: 8,
   },
   {
     vraag:
@@ -614,7 +535,6 @@ let hardVragen = [
     goedAntwoord: 2,
     uitleg:
       "De Sovjets hebben goed gekeken naar de Independent toen ze de T-35 maakten, die ook 5 torens had. De Britten zelf hebben hem nooit in productie genomen.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -629,7 +549,6 @@ let hardVragen = [
     goedAntwoord: 1,
     uitleg:
       "Hij werd ontworpen door dezelfde mannen die in 1916 de eerste tanks hadden gemaakt: 'The Old Gang'. Ze dachten dat het weer een oorlog met loopgraven zou worden. Er is er maar 1 gebouwd.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -639,7 +558,6 @@ let hardVragen = [
     goedAntwoord: 2,
     uitleg:
       "4 rupsbanden zodat hij niet vast zou zakken in moeras of puin, en een vorm als een vliegende schotel zodat de drukgolf van een atoombom hem niet omver zou blazen. Er is er maar 1 gemaakt.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -654,7 +572,6 @@ let hardVragen = [
     goedAntwoord: 1,
     uitleg:
       "Met alle rupsbanden was hij te breed voor wegen en bruggen. Dan haalden ze de buitenste eraf, maakten die aan elkaar vast en sleepten ze achter de tank aan. Er bestaat er nog maar 1.",
-    animatie: "geen",
   },
   {
     vraag:
@@ -664,9 +581,6 @@ let hardVragen = [
     goedAntwoord: 2,
     uitleg:
       "Ongeveer 140 keer! De kleine Duitse granaten kwamen niet door zijn 60mm pantser. Kapitein Pierre Billotte en zijn bemanning werden er beroemd door.",
-    animatie: "stopt",
-    dikte: 8,
-    snelheid: 3,
   },
   {
     vraag:
@@ -676,7 +590,6 @@ let hardVragen = [
     goedAntwoord: 1,
     uitleg:
       "Tiger 131 werd in 1943 in Tunesië buitgemaakt door de Britten, nadat een granaat zijn toren had vastgeslagen. Het is de enige Tiger I ter wereld die nog rijdt.",
-    animatie: "geen",
   },
 ];
 
@@ -701,14 +614,7 @@ let extraPunten = 0;
 // op welk antwoord je hebt geklikt
 let gekozenAntwoord = 0;
 
-// plek van de bal in de animatie
-let balX = 0;
-let balY = 0;
-
-// telt de frames van de animatie zodat hij opnieuw kan beginnen
-let animatieTeller = 0;
-
-// vak in het midden voor het plaatje en de animatie
+// vak in het midden voor het plaatje
 let vakX = 130;
 let vakY = 130;
 let vakBreedte = 640;
@@ -779,21 +685,6 @@ function tekenStartScherm() {
     width / 2,
     295,
   );
-  text(
-    "Bij vragen over pantser en munitie zie je daarna een animatie:",
-    width / 2,
-    360,
-  );
-  text("de lijn is het pantser, de bal is de kogel", width / 2, 390);
-
-  // voorbeeldje van een bal en een lijn
-  stroke(0);
-  strokeWeight(6);
-  line(500, 440, 500, 540);
-  noStroke();
-  fill(0);
-  circle(400, 490, 20);
-
   tekenGroteKnop("Start", groteKnopX);
 }
 
@@ -815,13 +706,7 @@ function tekenUitlegScherm() {
 
   tekenBovenkant();
   tekenVraag(vraag.vraag);
-
-  // alleen een animatie bij vragen over pantser of munitie, anders het plaatje
-  if (vraag.animatie == "geen") {
-    tekenPlaatje(vraag.img);
-  } else {
-    tekenAnimatie(vraag);
-  }
+  tekenPlaatje(vraag.img);
 
   fill(0);
   noStroke();
@@ -1052,88 +937,6 @@ function tekenGroteKnop(knopTekst, x) {
   text(knopTekst, x + groteKnopBreedte / 2, groteKnopY + groteKnopHoogte / 2);
 }
 
-// bal terug naar het begin zetten
-function startAnimatie() {
-  balX = vakX + 40;
-  balY = vakY + vakHoogte / 2;
-  animatieTeller = 0;
-}
-
-// bal vliegt van links naar de lijn, wat er dan gebeurt hangt af van de vraag
-function tekenAnimatie(vraag) {
-  // rand om het vak
-  noFill();
-  stroke(0);
-  strokeWeight(2);
-  rect(vakX, vakY, vakBreedte, vakHoogte);
-
-  // na 200 frames opnieuw beginnen
-  animatieTeller = animatieTeller + 1;
-  if (animatieTeller > 200) {
-    startAnimatie();
-  }
-
-  // plek van het pantser
-  let muurX = vakX + 400;
-  let muurBoven = vakY + 50;
-  let muurOnder = vakY + 250;
-
-  // lijn zo dik als bij de vraag staat
-  stroke(0);
-  strokeWeight(vraag.dikte);
-
-  if (vraag.animatie == "door") {
-    // bal gaat gewoon door
-    balX = balX + vraag.snelheid;
-
-    if (balX < muurX) {
-      // bal is er nog niet, hele lijn tekenen
-      line(muurX, muurBoven, muurX, muurOnder);
-    } else {
-      // bal is erdoor, lijn in 2 stukken met een gat ertussen
-      line(muurX, muurBoven, muurX, balY - 15);
-      line(muurX, balY + 15, muurX, muurOnder);
-    }
-  } else if (vraag.animatie == "stopt") {
-    line(muurX, muurBoven, muurX, muurOnder);
-
-    // bal gaat tot de lijn en blijft daar
-    if (balX < muurX - 15) {
-      balX = balX + vraag.snelheid;
-    }
-  } else if (vraag.animatie == "afketsen") {
-    // schuine lijn van linksonder naar rechtsboven
-    line(muurX - 100, muurOnder, muurX + 100, muurBoven);
-
-    // eerst naar rechts, als hij de lijn raakt gaat hij omhoog
-    if (balX < muurX - 15) {
-      balX = balX + vraag.snelheid;
-    } else {
-      balY = balY - vraag.snelheid;
-    }
-  } else if (vraag.animatie == "kooi") {
-    // echte pantser (dik)
-    line(muurX, muurBoven, muurX, muurOnder);
-
-    // kooi (dunne lijn) een stuk ervoor
-    let kooiX = muurX - 120;
-    strokeWeight(2);
-    line(kooiX, muurBoven, kooiX, muurOnder);
-
-    // bal blijft in de kooi hangen
-    if (balX < kooiX - 12) {
-      balX = balX + vraag.snelheid;
-    }
-  }
-
-  // bal alleen tekenen als hij nog in het vak is
-  if (balX < vakX + vakBreedte - 10 && balY > vakY + 10) {
-    noStroke();
-    fill(0);
-    circle(balX, balY, 20);
-  }
-}
-
 function mousePressed() {
   if (scherm == "start") {
     // quiz starten
@@ -1155,8 +958,7 @@ function mousePressed() {
           }
         }
 
-        // animatie klaarzetten en naar het uitleg scherm
-        startAnimatie();
+        // naar het uitleg scherm
         scherm = "uitleg";
       }
     }
