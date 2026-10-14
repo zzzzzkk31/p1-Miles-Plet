@@ -412,197 +412,201 @@ let vragen = [
 ];
 
 // vragen voor de hard mode, van moeilijk naar heel erg moeilijk
+// hier staan geen hints meer in de vraag, je moet het echt weten
 let hardVragen = [
   {
     vraag:
-      "Dit is Little Willie uit 1915, het allereerste tank-prototype. Waarom heten tanks eigenlijk 'tank'?",
-    plaatje: "plaatjes/littlewillie.jpg",
+      "Deze Britse Mark I staat klaar voor de allereerste tankaanval ooit. Op welke dag was dat?",
+    plaatje: "plaatjes/flers.jpg",
     antwoorden: [
-      "Het is een afkorting",
-      "Om het geheim te houden: ze zeiden dat het watertanks waren",
-      "Naar de uitvinder, meneer Tank",
-      "Omdat ze vol benzine zitten",
+      "1 juli 1916",
+      "15 september 1916",
+      "20 november 1917",
+      "8 augustus 1918",
     ],
     goedAntwoord: 1,
     uitleg:
-      "De Britten deden alsof ze watertanks aan het bouwen waren, zodat spionnen niet wisten dat het een gevechtsvoertuig was. De naam 'tank' bleef daarna gewoon hangen.",
+      "15 september 1916 bij Flers-Courcelette, tijdens de Slag aan de Somme. 1 juli 1916 was de eerste dag van de Somme (zonder tanks) en 20 november 1917 was Cambrai, de eerste grote tankaanval.",
   },
   {
     vraag:
-      "Op D-Day in 1944 reden deze Shermans vanaf zee naar het strand. Wat was dat opgevouwen doek rond de tank?",
-    plaatje: "plaatjes/shermandd.jpg",
+      "De vering van de Sovjet BT tanks en de T-34 kwam van deze tank. Uit welk land kwam de uitvinder?",
+    plaatje: "plaatjes/christie.jpg",
     antwoorden: [
-      "Camouflage",
-      "Een scherm waardoor de tank kon drijven",
-      "Een tent om in te slapen",
-      "Bescherming tegen zand",
+      "Duitsland",
+      "Frankrijk",
+      "Verenigde Staten",
+      "Tsjechoslowakije",
     ],
-    goedAntwoord: 1,
+    goedAntwoord: 2,
     uitleg:
-      "Dit is een Sherman DD (Duplex Drive). Het doek werd omhoog gezet zodat de tank als een boot dreef, en 2 schroeven duwden hem vooruit. Bij Omaha Beach zonken er veel door de hoge golven.",
+      "Dit is de Christie M1931 van de Amerikaan J. Walter Christie (hij staat bovenop). Het Amerikaanse leger wilde hem niet echt, dus de Sovjets kochten er 2 en bouwden er duizenden tanks op.",
   },
   {
-    vraag:
-      "Dit is een Duitse A7V uit 1918, met 18 man bemanning erin. Hoeveel A7V's hebben de Duitsers in totaal gebouwd?",
-    plaatje: "plaatjes/a7v.jpg",
-    antwoorden: ["5", "20", "200", "2000"],
-    goedAntwoord: 1,
-    uitleg:
-      "Maar 20! Op 24 april 1918 vocht een A7V bij Villers-Bretonneux tegen een Britse Mark IV: het allereerste gevecht van tank tegen tank.",
-  },
-  {
-    vraag: "Wat trok de Britse Churchill Crocodile achter zich aan?",
-    plaatje: "plaatjes/crocodile.jpg",
+    vraag: "Wat voor motor zit er in een M1 Abrams?",
+    plaatje: "plaatjes/abramsvuur.jpg",
     antwoorden: [
-      "Een kanon",
-      "Een aanhanger met brandstof voor zijn vlammenwerper",
-      "Een tweede tank",
-      "Een boot",
+      "Een V12 dieselmotor",
+      "Een benzinemotor van een vrachtwagen",
+      "Twee elektromotoren met een accu",
+      "Een gasturbine, een soort straalmotor",
     ],
-    goedAntwoord: 1,
+    goedAntwoord: 3,
     uitleg:
-      "De Crocodile was een vlammenwerper-tank. In de aanhanger zat ongeveer 1800 liter brandstof, en hij kon tot ongeveer 110 meter ver vuur spuiten.",
+      "De Abrams heeft een AGT1500 gasturbine van 1500 pk. Hij is stil en snel, maar slurpt heel veel brandstof, ook als hij stilstaat.",
   },
   {
-    vraag:
-      "Duitse Panzer IV's kregen vanaf 1943 dunne platen aan de zijkant: Schürzen (schorten). Waar waren die vooral voor bedoeld?",
-    plaatje: "plaatjes/schurzen.jpg",
+    vraag: "Wat is er zo bijzonder aan de toren van de Russische T-14 Armata?",
+    plaatje: "plaatjes/t14.jpg",
     antwoorden: [
-      "Tegen modder",
-      "Tegen kogels van Sovjet antitankgeweren",
-      "Om er reclame op te zetten",
-      "Om de tank zwaarder te maken",
-    ],
-    goedAntwoord: 1,
-    uitleg:
-      "De dunne platen vingen de kogels van Sovjet antitankgeweren op of lieten ze kantelen, zodat ze niet meer door het dunne pantser van de zijkant kwamen.",
-  },
-  {
-    vraag:
-      "De Sturmtiger schoot een raketgranaat van 38cm die bijna 400 kilo woog. Hoe kreeg de bemanning die in de tank?",
-    plaatje: "plaatjes/sturmtiger.jpg",
-    antwoorden: [
-      "Met z'n vieren tillen",
-      "Met een kraantje dat op de tank zat",
-      "Hij rolde er vanzelf in",
-      "Met een helikopter",
-    ],
-    goedAntwoord: 1,
-    uitleg:
-      "Achter op de tank zat een kleine kraan om de granaten op te tillen. Er pasten er maar 14 in. Een gebouw of bunker hield zo'n granaat bijna niet tegen.",
-  },
-  {
-    vraag: "De Japanse Type 2 Ka-Mi kon zwemmen. Hoe deed hij dat?",
-    plaatje: "plaatjes/kami.jpg",
-    antwoorden: [
-      "Met grote drijvers voor en achter die er op het land af konden",
-      "Met opblaasbare banden",
-      "Hij zwom niet, hij reed over de bodem",
-      "Met vleugels als een vis",
+      "Er zit niemand in, de bemanning zit in de romp",
+      "Hij kan helemaal los van de tank rondrijden",
+      "Hij is van keramiek gemaakt",
+      "Er zitten twee kanonnen in",
     ],
     goedAntwoord: 0,
     uitleg:
-      "Aan de voorkant en achterkant zaten holle drijvers. Op het strand werden ze losgemaakt en dan reed hij verder als een gewone tank.",
+      "De toren is onbemand en wordt op afstand bediend. De 3 bemanningsleden zitten voorin de romp in een extra gepantserde 'capsule'.",
   },
   {
-    vraag:
-      "Bij een APFSDS pijl valt er meteen na het schieten iets af (zie plaatje). Dat heet de 'sabot'. Wat betekent dat Franse woord?",
-    plaatje: "plaatjes/sabot.jpg",
-    antwoorden: ["Pijl", "Klomp", "Kogel", "Vleugel"],
-    goedAntwoord: 1,
-    uitleg:
-      "Sabot betekent klomp. De 'klomp' houdt de dunne pijl op zijn plek in de dikke loop en valt eraf zodra hij uit de loop is. Dan vliegt alleen de pijl verder.",
-  },
-  {
-    vraag:
-      "Een HEAT granaat maakt een superdunne straal van metaal die door pantser gaat. Hoe gaat die straal door het pantser?",
-    plaatje: "plaatjes/heat.jpg",
-    antwoorden: [
-      "Hij smelt erdoorheen omdat hij zo heet is",
-      "Door enorme druk: het staal wordt opzij geduwd zonder te smelten",
-      "Hij boort een gat",
-      "Met zuur",
-    ],
-    goedAntwoord: 1,
-    uitleg:
-      "Veel mensen denken dat hij smelt, maar HEAT betekent High Explosive Anti-Tank. De straal gaat zo snel dat het staal zich als een vloeistof gedraagt en opzij geduwd wordt.",
-  },
-  {
-    vraag:
-      "Deze Britse Vickers Independent uit 1926 had 5 torens. Er is er maar 1 gebouwd. Welke tank is waarschijnlijk op hem gebaseerd?",
-    plaatje: "plaatjes/independent.jpg",
-    antwoorden: ["Tiger I", "Sherman", "T-35", "Maus"],
-    goedAntwoord: 2,
-    uitleg:
-      "De Sovjets hebben goed gekeken naar de Independent toen ze de T-35 maakten, die ook 5 torens had. De Britten zelf hebben hem nooit in productie genomen.",
-  },
-  {
-    vraag:
-      "De Britse TOG II uit 1941 leek op een tank uit de Eerste Wereldoorlog. Waar staat TOG voor?",
-    plaatje: "plaatjes/tog2.jpg",
-    antwoorden: [
-      "Tank Of Giants",
-      "The Old Gang",
-      "Top Offensive Gun",
-      "Tracked Over Ground",
-    ],
-    goedAntwoord: 1,
-    uitleg:
-      "Hij werd ontworpen door dezelfde mannen die in 1916 de eerste tanks hadden gemaakt: 'The Old Gang'. Ze dachten dat het weer een oorlog met loopgraven zou worden. Er is er maar 1 gebouwd.",
-  },
-  {
-    vraag:
-      "De Sovjet Object 279 uit 1959 was gemaakt om een atoomoorlog te overleven. Hoeveel rupsbanden had hij?",
+    vraag: "Waarom had de Sovjet Object 279 de vorm van een vliegende schotel?",
     plaatje: "plaatjes/object279.jpg",
-    antwoorden: ["2", "3", "4", "6"],
-    goedAntwoord: 2,
-    uitleg:
-      "4 rupsbanden zodat hij niet vast zou zakken in moeras of puin, en een vorm als een vliegende schotel zodat de drukgolf van een atoombom hem niet omver zou blazen. Er is er maar 1 gemaakt.",
-  },
-  {
-    vraag:
-      "De Amerikaanse T28 Super Heavy Tank had dubbele rupsbanden aan elke kant. Wat konden ze met de buitenste rupsbanden doen?",
-    plaatje: "plaatjes/t28.jpg",
     antwoorden: [
-      "Er extra granaten in stoppen",
-      "Eraf halen en als aanhanger achter de tank aan slepen",
-      "Ze als brug gebruiken",
-      "Er een tweede tank van maken",
+      "Zodat hij kon drijven",
+      "Zodat een atoombom hem niet om zou blazen",
+      "Om minder te wegen",
+      "Zodat radar hem niet kon zien",
     ],
     goedAntwoord: 1,
     uitleg:
-      "Met alle rupsbanden was hij te breed voor wegen en bruggen. Dan haalden ze de buitenste eraf, maakten die aan elkaar vast en sleepten ze achter de tank aan. Er bestaat er nog maar 1.",
+      "Hij was gemaakt voor een atoomoorlog. Door de platte ronde vorm kon de drukgolf hem niet omkiepen. Hij had ook 4 rupsbanden, zodat hij niet vast kon lopen op puin.",
   },
   {
     vraag:
-      "In mei 1940 schoot de Franse Char B1 bis 'Eure' bij Stonne 13 Duitse tanks kapot. Hoe vaak werd hij ongeveer geraakt zonder dat er iets doorheen ging?",
-    plaatje: "plaatjes/charb1.jpg",
-    antwoorden: ["3 keer", "20 keer", "Ongeveer 140 keer", "1000 keer"],
+      "Van de 29 Sherman DD tanks die op D-Day bij Omaha Beach het water in gingen, hoeveel kwamen er zwemmend aan op het strand?",
+    plaatje: "plaatjes/shermandd.jpg",
+    antwoorden: ["2", "11", "19", "27"],
+    goedAntwoord: 0,
+    uitleg:
+      "Maar 2! Ze werden veel te ver van de kust te water gelaten en de golven waren te hoog. 27 tanks zonken. Het doek om de tank moest hem laten drijven.",
+  },
+  {
+    vraag:
+      "In juni 1941 bleef bij Raseiniai (Litouwen) 1 Sovjet KV tank op een kruispunt staan. Hoe lang hield hij een hele Duitse pantserdivisie tegen?",
+    plaatje: "plaatjes/kv1.jpg",
+    antwoorden: ["10 minuten", "1 uur", "Ongeveer een dag", "Een hele week"],
     goedAntwoord: 2,
     uitleg:
-      "Ongeveer 140 keer! De kleine Duitse granaten kwamen niet door zijn 60mm pantser. Kapitein Pierre Billotte en zijn bemanning werden er beroemd door.",
+      "Ongeveer een dag. De Duitse antitankkanonnen kwamen niet door zijn pantser. Uiteindelijk werd hij met een 88mm kanon en explosieven uitgeschakeld.",
   },
   {
     vraag:
-      "Er is nog maar 1 Tiger I in de wereld die echt kan rijden. Hij staat in het Tank Museum in Bovington in Engeland. Welk nummer heeft hij?",
-    plaatje: "plaatjes/tiger131.jpg",
-    antwoorden: ["007", "131", "217", "501"],
+      "Het 38cm wapen van de Sturmtiger was eigenlijk ontworpen voor iets heel anders. Waarvoor?",
+    plaatje: "plaatjes/sturmtiger.jpg",
+    antwoorden: [
+      "Voor de marine, tegen onderzeeërs",
+      "Als luchtafweergeschut",
+      "Om raketten naar de ruimte te schieten",
+      "Om bruggen op te blazen vanaf een trein",
+    ],
+    goedAntwoord: 0,
+    uitleg:
+      "Het was een raketwerper van Rheinmetall die bedoeld was voor de Duitse marine, om onderzeeërs aan te vallen. Er zijn maar 18 Sturmtigers gebouwd.",
+  },
+  {
+    vraag:
+      "De Maus woog ongeveer 188 ton, te zwaar voor bijna elke brug. Hoe moest hij over een rivier komen?",
+    plaatje: "plaatjes/maus2.jpg",
+    antwoorden: [
+      "Met een speciale veerboot",
+      "Hij moest altijd omrijden",
+      "Uit elkaar halen en weer in elkaar zetten",
+      "Onder water over de bodem rijden",
+    ],
+    goedAntwoord: 3,
+    uitleg:
+      "Hij kon tot 8 meter diep over de bodem rijden met een snorkel voor lucht. De stroom voor zijn elektromotoren kwam dan via een kabel van een tweede voertuig op de oever.",
+  },
+  {
+    vraag:
+      "Bij Prochorovka was een van de bekendste tankslagen van de Slag om Koersk. Op welke dag was dat?",
+    plaatje: "plaatjes/koersk.jpg",
+    antwoorden: [
+      "22 juni 1941",
+      "12 juli 1943",
+      "6 juni 1944",
+      "16 december 1944",
+    ],
     goedAntwoord: 1,
     uitleg:
-      "Tiger 131 werd in 1943 in Tunesië buitgemaakt door de Britten, nadat een granaat zijn toren had vastgeslagen. Het is de enige Tiger I ter wereld die nog rijdt.",
+      "12 juli 1943. De andere data: 22 juni 1941 = Duitsland valt de Sovjet-Unie aan, 6 juni 1944 = D-Day, 16 december 1944 = begin van het Ardennenoffensief.",
+  },
+  {
+    vraag:
+      "De Challenger 1 had 'Chobham' pantser, met lagen keramiek erin. Waar komt de naam Chobham vandaan?",
+    plaatje: "plaatjes/challenger1.jpg",
+    antwoorden: [
+      "Van de uitvinder, Sir Arthur Chobham",
+      "Van de fabriek die het maakte",
+      "Van de plaats van het onderzoekscentrum",
+      "Het is een afkorting",
+    ],
+    goedAntwoord: 2,
+    uitleg:
+      "Het werd ontwikkeld bij een legeronderzoekscentrum bij Chobham Common in Surrey, Engeland. Hoe het precies in elkaar zit is nog steeds geheim.",
+  },
+  {
+    vraag: "In welk land werd Tiger 131 in 1943 door de Britten buitgemaakt?",
+    plaatje: "plaatjes/tiger131.jpg",
+    antwoorden: ["Libië", "Italië", "Egypte", "Tunesië"],
+    goedAntwoord: 3,
+    uitleg:
+      "In Tunesië, in april 1943. Een granaat had zijn toren vastgeslagen en de bemanning vluchtte. Nu is hij de enige Tiger I ter wereld die nog rijdt, in het Tank Museum in Bovington.",
+  },
+  {
+    vraag:
+      "Dit is Mephisto, de enige Duitse A7V tank uit de Eerste Wereldoorlog die nog bestaat. In welk land staat hij?",
+    plaatje: "plaatjes/mephisto.jpg",
+    antwoorden: ["Duitsland", "Australië", "Frankrijk", "Engeland"],
+    goedAntwoord: 1,
+    uitleg:
+      "In Australië! Hij bleef in 1918 achter bij Villers-Bretonneux, waar het allereerste gevecht van tank tegen tank was. Australische soldaten haalden hem op en namen hem mee naar huis.",
+  },
+  {
+    vraag:
+      "De eerste Tiger II's hadden een ronde 'Porsche' toren, zoals op dit plaatje. Hoeveel zijn er met deze toren gebouwd?",
+    plaatje: "plaatjes/tiger2porsche.jpg",
+    antwoorden: ["5", "50", "250", "500"],
+    goedAntwoord: 1,
+    uitleg:
+      "50. Daarna kwam de hoekige Henschel toren, want de ronde voorkant van de Porsche toren kon granaten naar beneden laten afketsen, precies op het dunne dak van de romp.",
+  },
+  {
+    vraag:
+      "Op 16 mei 1940 schoot een Char B1 bis bij Stonne in z'n eentje 13 Duitse tanks kapot. Hoe heette die tank?",
+    plaatje: "plaatjes/charb1.jpg",
+    antwoorden: ["Toulal", "Eure", "Verdun", "Jeanne d'Arc"],
+    goedAntwoord: 1,
+    uitleg:
+      "Eure, van kapitein Pierre Billotte. Hij werd ongeveer 140 keer geraakt en niets kwam erdoorheen. De tank op het plaatje heet Toulal en staat nu als monument in Stonne.",
   },
 ];
 
 // welk scherm je ziet: "start", "vraag", "uitleg", "einde" of "hardEinde"
+// draw() kijkt elke keer naar deze variabele om te weten wat hij moet tekenen
+// mousePressed() verandert hem als je op een knop klikt
 let scherm = "start";
 
 // de lijst met vragen die je nu doet: eerst vragen, daarna eventueel hardVragen
+// alle teken functies gebruiken "lijst", zo werkt dezelfde code voor allebei
 let lijst = vragen;
 
 // true als je in de hard mode zit
+// hiermee weten we of een goed antwoord bij score of bij extraPunten komt
 let hardMode = false;
 
 // bij welke vraag je bent (0 is de eerste)
+// lijst[huidigeVraag] is dus de vraag die je nu ziet
 let huidigeVraag = 0;
 
 // hoeveel je goed hebt
@@ -611,48 +615,69 @@ let score = 0;
 // hoeveel je goed hebt in de hard mode
 let extraPunten = 0;
 
-// op welk antwoord je hebt geklikt
+// op welk antwoord je hebt geklikt (0 t/m 3)
+// dit wordt op het uitleg scherm vergeleken met goedAntwoord
 let gekozenAntwoord = 0;
 
+// alles staat in variabelen, dan hoef je het maar op 1 plek te veranderen
+
 // vak in het midden voor het plaatje
+// x en y zijn de linkerbovenhoek van het vak
 let vakX = 130;
 let vakY = 130;
 let vakBreedte = 640;
 let vakHoogte = 300;
 
 // maat van de antwoord knoppen
+// de x en y van elke knop komen uit knopX() en knopY()
 let knopBreedte = 410;
 let knopHoogte = 65;
 
 // grote knop onderaan (start, volgende, opnieuw)
+// groteKnopX is de x als er maar 1 knop in het midden staat
 let groteKnopX = 350;
 let groteKnopY = 620;
 let groteKnopBreedte = 200;
 let groteKnopHoogte = 50;
 
 // op het eind scherm staan 2 knoppen naast elkaar
+// ze hebben dezelfde y en maat als de grote knop, alleen een andere x
 let opnieuwKnopX = 220;
 let hardModeKnopX = 480;
 
 // plaatjes laden voordat de quiz start
+// p5 roept preload() als eerste aan en wacht tot alles geladen is
+// pas daarna gaat hij naar setup(), zo is elk plaatje klaar als we het tekenen
 function preload() {
   // bij elke vraag het plaatje laden en in het object zelf bewaren als "img"
+  // zo heeft elke vraag zijn eigen plaatje bij zich, ook na het husselen
   for (let i = 0; i < vragen.length; i++) {
     vragen[i].img = loadImage(vragen[i].plaatje);
   }
+  // hetzelfde voor de hard mode vragen
   for (let i = 0; i < hardVragen.length; i++) {
     hardVragen[i].img = loadImage(hardVragen[i].plaatje);
   }
 }
 
+// setup() wordt 1 keer aangeroepen als het programma start
 function setup() {
+  // het tekenvlak maken: 900 breed en 700 hoog
   createCanvas(900, 700);
+
+  // gewone vragen door elkaar husselen bij het opstarten
+  // zo krijg je elke keer een andere volgorde
+  husselVragen(vragen);
 }
 
+// draw() wordt steeds opnieuw aangeroepen (ongeveer 60 keer per seconde)
+// elke keer wordt het hele scherm leeg gemaakt en opnieuw getekend
 function draw() {
+  // wit maken, anders blijft het vorige plaatje eronder staan
   background(255);
 
   // goede scherm laten zien
+  // elk scherm heeft zijn eigen teken functie
   if (scherm == "start") {
     tekenStartScherm();
   } else if (scherm == "vraag") {
@@ -666,11 +691,14 @@ function draw() {
   }
 }
 
+// het eerste scherm met de titel en de start knop
 function tekenStartScherm() {
+  // zwarte tekst zonder rand, gecentreerd rond het punt dat je geeft
   fill(0);
   noStroke();
   textAlign(CENTER, CENTER);
 
+  // grote titel, width / 2 is het midden van het scherm
   textSize(56);
   text("Tank Quiz", width / 2, 180);
 
@@ -680,6 +708,8 @@ function tekenStartScherm() {
     width / 2,
     260,
   );
+  // vragen.length is hoeveel vragen er in de array staan
+  // zo klopt het getal nog steeds als je vragen toevoegt of weghaalt
   text(
     vragen.length + " vragen, klik op het antwoord dat jij goed denkt",
     width / 2,
@@ -688,7 +718,9 @@ function tekenStartScherm() {
   tekenGroteKnop("Start", groteKnopX);
 }
 
+// het scherm met de vraag, het plaatje en de 4 antwoorden
 function tekenVraagScherm() {
+  // de vraag die we nu doen even in een kortere variabele zetten
   let vraag = lijst[huidigeVraag];
 
   tekenBovenkant();
@@ -696,23 +728,29 @@ function tekenVraagScherm() {
   tekenPlaatje(vraag.img);
 
   // alle 4 antwoorden tekenen met een for loop
+  // i is 0, 1, 2 en 3, dus A, B, C en D
   for (let i = 0; i < 4; i++) {
     tekenAntwoord(i);
   }
 }
 
+// het scherm na je antwoord: goed of fout, het goede antwoord en de uitleg
 function tekenUitlegScherm() {
   let vraag = lijst[huidigeVraag];
 
+  // bovenkant, vraag en plaatje blijven gewoon staan
+  // alleen de antwoord knoppen worden vervangen door de uitleg
   tekenBovenkant();
   tekenVraag(vraag.vraag);
   tekenPlaatje(vraag.img);
 
+  // tekst begint linksboven bij het punt dat je geeft
   fill(0);
   noStroke();
   textAlign(LEFT, TOP);
 
   // laten zien of het goed of fout was
+  // je antwoord vergelijken met het goede antwoord van deze vraag
   textSize(30);
   if (gekozenAntwoord == vraag.goedAntwoord) {
     text("Goed!", 30, 450);
@@ -721,12 +759,14 @@ function tekenUitlegScherm() {
   }
 
   // goede antwoord en uitleg laten zien
+  // vraag.goedAntwoord is een nummer, daarmee pak je de tekst uit de antwoorden array
   textSize(18);
   text("Het goede antwoord: " + vraag.antwoorden[vraag.goedAntwoord], 140, 457);
   // met een breedte en hoogte erbij gaat lange tekst vanzelf naar de volgende regel
   text(vraag.uitleg, 30, 500, 840, 100);
 
   // bij de laatste vraag staat er iets anders op de knop
+  // lijst.length - 1 is de laatste plek, want we beginnen te tellen bij 0
   if (huidigeVraag == lijst.length - 1) {
     tekenGroteKnop("Bekijk score", groteKnopX);
   } else {
@@ -734,6 +774,8 @@ function tekenUitlegScherm() {
   }
 }
 
+// het scherm na de gewone vragen met je score
+// hier kies je of je opnieuw begint of de hard mode doet
 function tekenEindScherm() {
   fill(0);
   noStroke();
@@ -746,6 +788,7 @@ function tekenEindScherm() {
   text("Je score: " + score + " van de " + vragen.length, width / 2, 300);
 
   // ander bericht bij een andere score
+  // alles goed, minstens de helft goed, of minder dan de helft
   textSize(20);
   if (score == vragen.length) {
     text("Alles goed! Jij bent een echte tank expert.", width / 2, 370);
@@ -764,10 +807,12 @@ function tekenEindScherm() {
     515,
   );
 
+  // 2 knoppen naast elkaar, links opnieuw en rechts hard mode
   tekenGroteKnop("Opnieuw", opnieuwKnopX);
   tekenGroteKnop("Hard mode", hardModeKnopX);
 }
 
+// het scherm na de hard mode met allebei je scores
 function tekenHardEindScherm() {
   fill(0);
   noStroke();
@@ -776,6 +821,7 @@ function tekenHardEindScherm() {
   textSize(50);
   text("Hard mode klaar!", width / 2, 200);
 
+  // score van de gewone vragen blijft bewaard, die laten we ook nog zien
   textSize(30);
   text("Gewone vragen: " + score + " van de " + vragen.length, width / 2, 290);
   text(
@@ -785,6 +831,7 @@ function tekenHardEindScherm() {
   );
 
   // ander bericht bij een andere score
+  // net als bij het gewone eind scherm, maar dan met extraPunten
   textSize(20);
   if (extraPunten == hardVragen.length) {
     text(
@@ -798,6 +845,7 @@ function tekenHardEindScherm() {
     text("Geen schande, deze vragen weet bijna niemand.", width / 2, 420);
   }
 
+  // hier is maar 1 knop, dus die staat in het midden
   tekenGroteKnop("Opnieuw", groteKnopX);
 }
 
@@ -807,6 +855,8 @@ function tekenBovenkant() {
   noStroke();
   textSize(16);
 
+  // links: welke vraag je bent
+  // huidigeVraag + 1 omdat we bij 0 beginnen, maar mensen tellen vanaf 1
   textAlign(LEFT, CENTER);
   if (hardMode) {
     text(
@@ -818,6 +868,8 @@ function tekenBovenkant() {
     text("Vraag " + (huidigeVraag + 1) + " van " + lijst.length, 30, 25);
   }
 
+  // rechts: je score
+  // met RIGHT eindigt de tekst bij x, dus width - 30 is 30 van de rechterkant af
   textAlign(RIGHT, CENTER);
   if (hardMode) {
     text("Score: " + score + "   Extra punten: " + extraPunten, width - 30, 25);
@@ -827,22 +879,27 @@ function tekenBovenkant() {
 }
 
 // tekent de vraag onder de bovenkant
+// vraagTekst is de tekst van de vraag die je meegeeft
 function tekenVraag(vraagTekst) {
   fill(0);
   noStroke();
   textAlign(LEFT, TOP);
   textSize(20);
+  // 840 breed en 75 hoog, lange vragen gaan vanzelf over 2 of 3 regels
   text(vraagTekst, 30, 50, 840, 75);
 }
 
 // tekent het plaatje in het midden van het vak
+// img is het plaatje dat in preload() geladen is
 function tekenPlaatje(img) {
   // plaatje wordt even hoog als het vak
   // breedte zo uitrekenen dat het plaatje niet uitgerekt wordt
+  // bijvoorbeeld: plaatje van 800 x 600 wordt 400 x 300 (alles gedeeld door 2)
   let hoogte = vakHoogte;
   let breedte = (img.width * vakHoogte) / img.height;
 
   // in het midden van het vak zetten
+  // de ruimte die over is (vakBreedte - breedte) verdelen over links en rechts
   let x = vakX + (vakBreedte - breedte) / 2;
 
   image(img, x, vakY, breedte, hoogte);
@@ -867,6 +924,8 @@ function knopY(nummer) {
 }
 
 // true als de muis op antwoord knop "nummer" staat
+// de muis moet rechts van de linkerkant, links van de rechterkant,
+// onder de bovenkant en boven de onderkant zijn
 function muisOpKnop(nummer) {
   let x = knopX(nummer);
   let y = knopY(nummer);
@@ -879,6 +938,8 @@ function muisOpKnop(nummer) {
 }
 
 // true als de muis op de grote knop staat die bij x begint
+// werkt hetzelfde als muisOpKnop, maar dan met de maat van de grote knop
+// x meegeven omdat er op het eind scherm 2 grote knoppen naast elkaar staan
 function muisOpGroteKnop(x) {
   return (
     mouseX > x &&
@@ -892,19 +953,24 @@ function muisOpGroteKnop(x) {
 function tekenAntwoord(nummer) {
   let x = knopX(nummer);
   let y = knopY(nummer);
+  // letters[0] is "A", letters[1] is "B", enzovoort
   let letters = ["A", "B", "C", "D"];
 
   // grijs als de muis erop staat
+  // omdat draw() steeds opnieuw tekent, zie je dit meteen als je de muis beweegt
   if (muisOpKnop(nummer)) {
     fill(220);
   } else {
     fill(255);
   }
+  // zwarte rand van 2 dik, de 8 aan het eind maakt de hoeken rond
   stroke(0);
   strokeWeight(2);
   rect(x, y, knopBreedte, knopHoogte, 8);
 
   // letter en antwoord
+  // x + 15 zodat de tekst niet tegen de rand aan plakt
+  // met breedte en hoogte erbij gaat een lang antwoord naar de volgende regel
   fill(0);
   noStroke();
   textSize(16);
@@ -919,6 +985,7 @@ function tekenAntwoord(nummer) {
 }
 
 // tekent een grote knop onderaan die bij x begint
+// knopTekst is wat er op de knop staat, bijvoorbeeld "Start" of "Volgende"
 function tekenGroteKnop(knopTekst, x) {
   // grijs als de muis erop staat
   if (muisOpGroteKnop(x)) {
@@ -930,6 +997,7 @@ function tekenGroteKnop(knopTekst, x) {
   strokeWeight(2);
   rect(x, groteKnopY, groteKnopBreedte, groteKnopHoogte, 8);
 
+  // tekst precies in het midden van de knop
   fill(0);
   noStroke();
   textSize(22);
@@ -937,6 +1005,8 @@ function tekenGroteKnop(knopTekst, x) {
   text(knopTekst, x + groteKnopBreedte / 2, groteKnopY + groteKnopHoogte / 2);
 }
 
+// p5 roept mousePressed() 1 keer aan elke keer dat je klikt
+// per scherm kijken we op welke knop je klikt en wat er dan moet gebeuren
 function mousePressed() {
   if (scherm == "start") {
     // quiz starten
@@ -945,8 +1015,10 @@ function mousePressed() {
     }
   } else if (scherm == "vraag") {
     // kijken op welk antwoord is geklikt
+    // alle 4 knoppen langs gaan en kijken of de muis erop staat
     for (let i = 0; i < 4; i++) {
       if (muisOpKnop(i)) {
+        // onthouden wat je koos, dat hebben we nodig op het uitleg scherm
         gekozenAntwoord = i;
 
         // goed antwoord = punt erbij, in de hard mode een extra punt
@@ -968,6 +1040,7 @@ function mousePressed() {
       huidigeVraag = huidigeVraag + 1;
 
       // na de laatste vraag naar het goede eind scherm
+      // als huidigeVraag even groot is als lijst.length is er geen vraag meer
       if (huidigeVraag == lijst.length) {
         if (hardMode) {
           scherm = "hardEinde";
@@ -984,9 +1057,11 @@ function mousePressed() {
     }
 
     // hard mode starten met de moeilijke vragen
+    // score blijft staan, alleen extraPunten begint weer bij 0
     if (muisOpGroteKnop(hardModeKnopX)) {
       hardMode = true;
       lijst = hardVragen;
+      husselVragen(hardVragen);
       huidigeVraag = 0;
       extraPunten = 0;
       scherm = "vraag";
@@ -999,11 +1074,51 @@ function mousePressed() {
 }
 
 // alles resetten en terug naar het start scherm
+// alle variabelen weer zoals ze aan het begin waren
+// en de vragen opnieuw husselen zodat je een nieuwe volgorde krijgt
 function opnieuwBeginnen() {
   hardMode = false;
   lijst = vragen;
+  husselVragen(vragen);
   huidigeVraag = 0;
   score = 0;
   extraPunten = 0;
   scherm = "start";
+}
+
+// array door elkaar husselen (Fisher-Yates shuffle)
+// begint achteraan en ruilt elk vakje met een willekeurig vakje ervoor
+// zo heeft elke volgorde precies evenveel kans
+function husselArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    // willekeurig getal van 0 t/m i
+    let j = Math.floor(Math.random() * (i + 1));
+    // vakje i en vakje j ruilen
+    // temp is een tijdelijke plek, anders ben je de waarde van array[i] kwijt
+    let temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+}
+
+// vragen en de antwoorden van elke vraag door elkaar husselen
+// de array zelf wordt veranderd, er komt geen nieuwe array terug
+function husselVragen(vragenLijst) {
+  // volgorde van de vragen husselen
+  husselArray(vragenLijst);
+
+  // antwoorden van elke vraag husselen en goedAntwoord aanpassen
+  for (let i = 0; i < vragenLijst.length; i++) {
+    let v = vragenLijst[i];
+
+    // eerst onthouden wat het goede antwoord is
+    // na het husselen klopt het nummer niet meer, de tekst wel
+    let goedeTekst = v.antwoorden[v.goedAntwoord];
+
+    husselArray(v.antwoorden);
+
+    // kijken op welke plek het goede antwoord nu staat
+    // indexOf geeft het nummer van de plek waar die tekst in de array staat
+    v.goedAntwoord = v.antwoorden.indexOf(goedeTekst);
+  }
 }
