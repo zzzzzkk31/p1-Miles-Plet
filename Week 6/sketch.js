@@ -4,6 +4,7 @@
 // wassen is een minigame waarbij je de vlekken van het huisdier afschrobt
 // alles wordt opgeslagen in localStorage, zo begint hij niet steeds opnieuw
 // als je slecht voor hem zorgt en zijn gezondheid 0 wordt, gaat hij dood
+// wil je een andere naam? dan moet je hem eerst doodschieten en een nieuwe nemen
 
 // het plaatje van de achtergrond
 let img;
@@ -30,7 +31,7 @@ let expressies = {};
 // welk gezicht je nu ziet, dit wordt elke keer gekozen in kiesExpressie()
 let huidigeExpressie = "blij";
 
-// welk scherm je ziet: "naam", "huisdier", "kraslot", "wassen" of "dood"
+// welk scherm je ziet: "naam", "huisdier", "kraslot", "wassen", "schieten" of "dood"
 // draw() kijkt elke keer naar deze variabele om te weten wat hij moet tekenen
 // mousePressed() kijkt ernaar om te weten welke knoppen er zijn
 // in setup() wordt gekeken met welk scherm je begint
@@ -41,14 +42,12 @@ let scherm = "huisdier";
 let huisdierNaam = "";
 // langer past niet mooi boven zijn hoofd
 let maxNaamLengte = 12;
-// true als je de naam verandert van een huisdier dat al een naam had
-// dan blijft zijn verjaardag hetzelfde en kun je met Escape terug
-let hernoemen = false;
-// de naam van voor het hernoemen, die komt terug als je op Escape drukt
-let oudeNaam = "";
 
 // true als het huisdier dood is, dan zie je alleen nog de grafsteen
 let dood = false;
+// waardoor hij dood is gegaan: "ziek" of "geschoten"
+// daarmee laten we op het dood scherm de goede tekst zien
+let doodsoorzaak = "";
 
 // verjaardag van het huisdier, wordt ingevuld als je hem een naam geeft
 // day(), month() en year() van p5 geven de datum van vandaag
@@ -202,6 +201,7 @@ function draw() {
   // dood == false erbij, anders gebeurt dit 60 keer per seconde
   if (huisdier.gezondheid <= 0 && dood == false) {
     dood = true;
+    doodsoorzaak = "ziek";
     scherm = "dood";
     opslaan();
   }
@@ -218,6 +218,8 @@ function draw() {
     tekenKraslotScherm();
   } else if (scherm == "wassen") {
     tekenWasScherm();
+  } else if (scherm == "schieten") {
+    tekenSchietScherm();
   }
 
   // melding als laatste, zodat hij boven alles staat
@@ -324,18 +326,13 @@ function begrensStatistieken() {
 // localStorage kan alleen tekst bewaren, geen objecten
 // JSON.stringify maakt van het object een lange tekst
 function opslaan() {
-  // tijdens het hernoemen de oude naam bewaren, de nieuwe is nog niet af
-  let naam = huisdierNaam;
-  if (hernoemen) {
-    naam = oudeNaam;
-  }
-
   let save = {
     huisdier: huisdier,
     geld: geld,
     slaapt: slaapt,
-    naam: naam,
+    naam: huisdierNaam,
     dood: dood,
+    doodsoorzaak: doodsoorzaak,
     geboorteDag: geboorteDag,
     geboorteMaand: geboorteMaand,
     geboorteJaar: geboorteJaar,
@@ -367,6 +364,9 @@ function laden() {
   }
   if (save.dood != undefined) {
     dood = save.dood;
+  }
+  if (save.doodsoorzaak != undefined) {
+    doodsoorzaak = save.doodsoorzaak;
   }
 
   // oude saves hebben nog geen verjaardag, dan is hij vandaag jarig
@@ -422,6 +422,7 @@ function nieuwHuisdier() {
   geld = 20;
   slaapt = false;
   dood = false;
+  doodsoorzaak = "";
   huisdierNaam = "";
   scherm = "naam";
   opslaan();
@@ -557,12 +558,58 @@ function muisOpNaam() {
   );
 }
 
-// naar het naam scherm om hem een nieuwe naam te geven
-// de oude naam onthouden we, voor als je toch op Escape drukt
-function startHernoemen() {
-  hernoemen = true;
-  oudeNaam = huisdierNaam;
-  scherm = "naam";
+// je kan je huisdier geen nieuwe naam geven
+// wil je toch een andere naam, dan moet je hem eerst doodschieten
+function startSchieten() {
+  scherm = "schieten";
+}
+
+// het scherm waar je op je huisdier richt
+// je ziet een rood vizier op de plek van de muis
+function tekenSchietScherm() {
+  tekenHuisdier();
+
+  // uitleg bovenaan
+  noStroke();
+  fill(0, 150);
+  rect(width / 2 - 260, 15, 520, 60, 10);
+  fill(255);
+  textSize(18);
+  textAlign(CENTER, CENTER);
+  text("Een nieuwe naam? Dan moet " + huisdierNaam + " eerst dood.", width / 2, 35);
+  textSize(15);
+  text("Klik op hem om te schieten", width / 2, 58);
+
+  tekenKnop("Toch niet", knopX(2), knopY);
+
+  // rood vizier: een cirkel met een kruis erdoor
+  noFill();
+  stroke(255, 0, 0);
+  strokeWeight(3);
+  circle(mouseX, mouseY, 40);
+  line(mouseX - 30, mouseY, mouseX + 30, mouseY);
+  line(mouseX, mouseY - 30, mouseX, mouseY + 30);
+  noStroke();
+}
+
+// true als de muis op het huisdier staat
+// zelfde berekening als in tekenHuisdier(), zo klopt het met wat je ziet
+function muisOpHuisdier() {
+  let plaatje = expressies[huidigeExpressie];
+  let breedte = plaatje.width * huisdierSchaal;
+  let hoogte = plaatje.height * huisdierSchaal;
+  let x = huisdierX - breedte / 2;
+  let y = huisdierVoetY - hoogte;
+
+  return mouseX > x && mouseX < x + breedte && mouseY > y && mouseY < y + hoogte;
+}
+
+// raak! het huisdier gaat dood
+function schiet() {
+  dood = true;
+  doodsoorzaak = "geschoten";
+  scherm = "dood";
+  toonMelding("PANG!");
 }
 
 // vak linksboven met een balk per statistiek en je geld
@@ -936,11 +983,7 @@ function tekenNaamScherm() {
   strokeWeight(4);
   textAlign(CENTER, CENTER);
   textSize(32);
-  if (hernoemen) {
-    text("Hoe moet " + oudeNaam + " voortaan heten?", width / 2, 60);
-  } else {
-    text("Hoe heet je huisdier?", width / 2, 60);
-  }
+  text("Hoe heet je huisdier?", width / 2, 60);
 
   // wit vak waar de naam in komt
   fill(255);
@@ -964,11 +1007,7 @@ function tekenNaamScherm() {
   stroke(0);
   strokeWeight(3);
   textSize(18);
-  if (hernoemen) {
-    text("Typ een naam en druk op Enter, Escape om terug te gaan", width / 2, 450);
-  } else {
-    text("Typ een naam en druk op Enter", width / 2, 450);
-  }
+  text("Typ een naam en druk op Enter", width / 2, 450);
   noStroke();
 }
 
@@ -1007,9 +1046,14 @@ function tekenDoodScherm() {
   fill(255);
   textSize(32);
   text(huisdierNaam + " is dood...", width / 2, 70);
+  // andere tekst als je hem zelf hebt doodgeschoten
+  let uitleg = "Je hebt niet goed genoeg voor hem gezorgd.";
+  if (doodsoorzaak == "geschoten") {
+    uitleg = "Je hebt hem doodgeschoten.";
+  }
   textSize(18);
   text(
-    "Hij werd " + leeftijdInDagen() + " dagen oud. Je hebt niet goed genoeg voor hem gezorgd.",
+    "Hij werd " + leeftijdInDagen() + " dagen oud. " + uitleg,
     width / 2,
     115,
   );
@@ -1031,22 +1075,13 @@ function keyPressed() {
     huisdierNaam = huisdierNaam.substring(0, huisdierNaam.length - 1);
   } else if (key == "Enter") {
     // alleen verder als je wel iets hebt getypt
-    // vandaag wordt zijn verjaardag, behalve als je hem alleen een nieuwe naam geeft
+    // vandaag wordt zijn verjaardag
     if (huisdierNaam.length > 0) {
-      if (hernoemen == false) {
-        zetVerjaardag();
-      }
-      hernoemen = false;
+      zetVerjaardag();
       scherm = "huisdier";
       laatsteTik = millis();
       opslaan();
     }
-  } else if (key == "Escape" && hernoemen) {
-    // toch niet hernoemen, de oude naam komt terug
-    huisdierNaam = oudeNaam;
-    hernoemen = false;
-    scherm = "huisdier";
-    laatsteTik = millis();
   } else if (key.length == 1 && huisdierNaam.length < maxNaamLengte) {
     // key.length == 1 betekent een gewone letter of cijfer
     // toetsen zoals "Shift" of "Tab" zijn langer, die willen we niet in de naam
@@ -1067,10 +1102,10 @@ function mousePressed() {
         slaapt = false;
       }
     } else {
-      // klik op zijn naam om hem een nieuwe naam te geven
+      // klik op zijn naam als je een andere naam wil, dan moet je gaan schieten
       // knop 0 t/m 4, in dezelfde volgorde als knopTeksten
       if (muisOpNaam()) {
-        startHernoemen();
+        startSchieten();
       } else if (muisOpKnop(knopX(0), knopY)) {
         voeden();
       } else if (muisOpKnop(knopX(1), knopY)) {
@@ -1092,6 +1127,13 @@ function mousePressed() {
     // stoppen zonder beloning
     if (muisOpKnop(knopX(2), knopY)) {
       scherm = "huisdier";
+    }
+  } else if (scherm == "schieten") {
+    // eerst naar de knop kijken, anders schiet je hem per ongeluk als je wil stoppen
+    if (muisOpKnop(knopX(2), knopY)) {
+      scherm = "huisdier";
+    } else if (muisOpHuisdier()) {
+      schiet();
     }
   }
 
