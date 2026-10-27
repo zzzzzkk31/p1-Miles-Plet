@@ -6,6 +6,7 @@
 // wassen is een minigame waarbij je de vlekken van het huisdier afschrobt
 // bij sommige gezichten, bij het eten en tijdens het slapen hoor je een geluidje
 // alles wordt opgeslagen in localStorage, zo begint hij niet steeds opnieuw
+// de tijd loopt ook door als de game dicht is, dus vergeet hem niet
 // als je slecht voor hem zorgt en zijn gezondheid 0 wordt, gaat hij dood
 // wil je een andere naam? dan moet je hem eerst doodschieten en een nieuwe nemen
 
@@ -105,6 +106,8 @@ let slaapt = false;
 
 // tijd bijhouden, net als de timer bij boter kaas en eieren
 // elke tikTijd milliseconden (1000 = 1 seconde) veranderen de statistieken een beetje
+// laatsteTik is in Date.now() tijd en wordt opgeslagen
+// zo weten we na het opstarten hoe lang je weg was en loopt de tijd door als de game dicht is
 let tikTijd = 1000;
 let laatsteTik = 0;
 
@@ -228,6 +231,8 @@ function setup() {
   noSmooth();
 
   // de oude save laden, zo ga je verder waar je was
+  // eerst laatsteTik op nu zetten, een oude save zonder laatsteTik begint dan gewoon vanaf nu
+  laatsteTik = Date.now();
   laden();
 
   // nog geen naam? dan moet je die eerst geven
@@ -237,8 +242,6 @@ function setup() {
   } else if (dood) {
     scherm = "dood";
   }
-
-  laatsteTik = millis();
 }
 
 // draw() wordt steeds opnieuw aangeroepen (ongeveer 60 keer per seconde)
@@ -501,22 +504,40 @@ function gaSlapen() {
   slaapt = true;
 }
 
-// elke seconde veranderen de statistieken een beetje
-// wakker: meer honger, moeier en minder blij
-// slapen: energie en gezondheid komen terug, honger gaat langzamer omhoog
+// kijkt hoeveel tikken er voorbij zijn sinds de laatste tik en doet die allemaal
+// normaal is dat er 1, maar als je weg was (game dicht of ander tabblad) kunnen het er heel veel zijn
+// zo gaat het huisdier door met honger krijgen, slapen enzovoort terwijl jij weg bent
 function tijdVerloop() {
   // tijdens het naam geven en als hij dood is loopt de tijd niet
   if (scherm == "naam" || dood) {
     return;
   }
 
-  // millis() is hoe lang het programma al draait
-  // als er sinds de laatste tik een seconde voorbij is, is het tijd voor een nieuwe tik
-  if (millis() - laatsteTik < tikTijd) {
-    return;
-  }
-  laatsteTik = millis();
+  // Date.now() gaat ook door als de game dicht is, millis() niet
+  // zolang er nog een hele tik voorbij is, doen we een tik
+  let getikt = false;
+  while (Date.now() - laatsteTik >= tikTijd) {
+    tik();
+    laatsteTik = laatsteTik + tikTijd;
+    getikt = true;
 
+    // dood gegaan terwijl je weg was? dan stoppen, draw() laat het dood scherm zien
+    if (huisdier.gezondheid <= 0) {
+      laatsteTik = Date.now();
+      break;
+    }
+  }
+
+  // opslaan na de tikken, zo ben je nooit veel kwijt
+  if (getikt) {
+    opslaan();
+  }
+}
+
+// 1 tik: de statistieken veranderen een beetje
+// wakker: meer honger, moeier en minder blij
+// slapen: energie en gezondheid komen terug, honger gaat langzamer omhoog
+function tik() {
   if (slaapt) {
     huisdier.energie = huisdier.energie + 2;
     huisdier.gezondheid = huisdier.gezondheid + 0.5;
@@ -541,9 +562,6 @@ function tijdVerloop() {
   }
 
   begrensStatistieken();
-
-  // elke seconde opslaan, zo ben je nooit veel kwijt
-  opslaan();
 }
 
 // zorgt dat elke statistiek tussen 0 en 100 blijft
@@ -571,6 +589,7 @@ function opslaan() {
     geboorteMaand: geboorteMaand,
     geboorteJaar: geboorteJaar,
     geboorteTijd: geboorteTijd,
+    laatsteTik: laatsteTik,
   };
   localStorage.setItem(opslagNaam, JSON.stringify(save));
 }
@@ -601,6 +620,11 @@ function laden() {
   }
   if (save.doodsoorzaak != undefined) {
     doodsoorzaak = save.doodsoorzaak;
+  }
+
+  // oude saves hebben nog geen laatsteTik, dan blijft het nu
+  if (save.laatsteTik != undefined) {
+    laatsteTik = save.laatsteTik;
   }
 
   // oude saves hebben nog geen verjaardag, dan is hij vandaag jarig
@@ -1333,7 +1357,7 @@ function keyPressed() {
     if (huisdierNaam.length > 0) {
       zetVerjaardag();
       scherm = "huisdier";
-      laatsteTik = millis();
+      laatsteTik = Date.now();
       opslaan();
     }
   } else if (key.length == 1 && huisdierNaam.length < maxNaamLengte) {
