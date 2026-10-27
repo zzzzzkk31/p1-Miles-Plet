@@ -1,7 +1,10 @@
 // virtueel huisdier
 // je moet je huisdier voeden, laten slapen, met hem spelen en hem wassen
 // eten kost geld, dat verdien je door krasloten te kopen en open te krassen
+// voeden is een minigame waarbij je vallend eten vangt met je huisdier
+// spelen is een minigame waarbij je zo vaak mogelijk op een stuiterende bal klikt
 // wassen is een minigame waarbij je de vlekken van het huisdier afschrobt
+// bij sommige gezichten, bij het eten en tijdens het slapen hoor je een geluidje
 // alles wordt opgeslagen in localStorage, zo begint hij niet steeds opnieuw
 // als je slecht voor hem zorgt en zijn gezondheid 0 wordt, gaat hij dood
 // wil je een andere naam? dan moet je hem eerst doodschieten en een nieuwe nemen
@@ -31,7 +34,16 @@ let expressies = {};
 // welk gezicht je nu ziet, dit wordt elke keer gekozen in kiesExpressie()
 let huidigeExpressie = "blij";
 
-// welk scherm je ziet: "naam", "huisdier", "kraslot", "wassen", "schieten" of "dood"
+// gezichten die een eigen geluidje hebben
+// elke naam is ook de naam van het geluid in de map sounds
+let geluidNamen = ["boos", "huilen", "verdrietig"];
+// hier komen de geluiden in, net als bij de expressies
+let geluiden = {};
+// geluid bij elke hap eten en een geluid dat blijft herhalen als hij slaapt
+let eetGeluid;
+let slaapGeluid;
+
+// welk scherm je ziet: "naam", "huisdier", "eten", "spelen", "kraslot", "wassen", "schieten" of "dood"
 // draw() kijkt elke keer naar deze variabele om te weten wat hij moet tekenen
 // mousePressed() kijkt ernaar om te weten welke knoppen er zijn
 // in setup() wordt gekeken met welk scherm je begint
@@ -99,6 +111,8 @@ let laatsteTik = 0;
 // na te veel eten is hij een paar seconden misselijk
 // misselijkTot is het moment (in millis) waarop dat weer over is
 let misselijkTot = 0;
+// na een goede actie in een minigame is hij heel even superblij
+let superblijTot = 0;
 
 // korte tekst bovenin zodat je ziet wat er gebeurt, bijvoorbeeld "Niet genoeg geld!"
 // meldingTot is het moment waarop hij weer weg moet
@@ -143,7 +157,7 @@ let krasVakken = [
   { x: 535, y: 158, symbool: 0, kras: 0, open: false },
 ];
 // hoe lang je moet krassen voordat een vakje open gaat
-let krasNodig = 40;
+let krasNodig = 20;
 // true als de winst van dit lot al bij je geld is opgeteld
 // anders zou je elke keer dat draw() wordt aangeroepen opnieuw geld krijgen
 let krasUitbetaald = false;
@@ -154,7 +168,38 @@ let krasWinst = 0;
 let vlekken = [];
 let aantalVlekken = 6;
 
-// plaatjes laden voordat het spel start
+// de eet minigame: eten valt uit de lucht en jij vangt het met je huisdier
+// soms valt er iets vies naar beneden, dat moet je juist ontwijken
+let etenSymbolen = ["🍖", "🍎", "🍕", "🍌", "🥕"];
+let viesSymbool = "💩";
+// kans dat er iets vies valt, 0.25 = 1 op de 4
+let viesKans = 0.25;
+// alles wat nu aan het vallen is, elk ding is een data-object met x, y en vies
+let vallendEten = [];
+// hoeveel dingen er per potje vallen en hoeveel er nog moeten komen
+let etenPerPotje = 10;
+let etenNogTeVallen = 0;
+let etenSnelheid = 4;
+// om de hoeveel milliseconden er iets nieuws valt
+let etenTussenTijd = 900;
+let volgendEtenTijd = 0;
+let etenGevangen = 0;
+// waar het huisdier staat, die volgt je muis
+let etenX = 440;
+
+// de speel minigame: een bal stuitert rond en jij klikt erop
+let bal = { x: 440, y: 250, snelheidX: 4, snelheidY: 3, grootte: 50 };
+// de bal stuitert tussen deze hoogtes, zo komt hij niet over de tekst en de knoppen
+let balBoven = 85;
+let balOnder = 415;
+// een potje duurt 15 seconden
+let speelDuur = 15000;
+let speelEindTijd = 0;
+let speelScore = 0;
+// zoveel geluk krijgt hij elke keer dat je de bal raakt
+let gelukPerRaak = 4;
+
+// plaatjes en geluiden laden voordat het spel start
 // p5 roept preload() als eerste aan en wacht tot alles geladen is
 function preload() {
   img = loadImage("huisdierachtergrond.png");
@@ -164,6 +209,14 @@ function preload() {
     let naam = expressieNamen[i];
     expressies[naam] = loadImage("expressies/" + naam + ".png");
   }
+
+  // zelfde manier voor de geluiden van de gezichten
+  for (let i = 0; i < geluidNamen.length; i++) {
+    let naam = geluidNamen[i];
+    geluiden[naam] = loadSound("sounds/" + naam + ".mp3");
+  }
+  eetGeluid = loadSound("sounds/eet.mp3");
+  slaapGeluid = loadSound("sounds/slapen.mp3");
 }
 
 // setup() wordt 1 keer aangeroepen als het programma start
@@ -196,6 +249,7 @@ function draw() {
   // de tijd loopt altijd door, ook als je aan het krassen of wassen bent
   tijdVerloop();
   kiesExpressie();
+  slaapGeluidje();
 
   // gezondheid op 0? dan gaat hij dood
   // dood == false erbij, anders gebeurt dit 60 keer per seconde
@@ -214,6 +268,10 @@ function draw() {
     tekenDoodScherm();
   } else if (scherm == "huisdier") {
     tekenHuisdierScherm();
+  } else if (scherm == "eten") {
+    tekenEetScherm();
+  } else if (scherm == "spelen") {
+    tekenSpeelScherm();
   } else if (scherm == "kraslot") {
     tekenKraslotScherm();
   } else if (scherm == "wassen") {
@@ -226,36 +284,212 @@ function draw() {
   tekenMelding();
 }
 
-// voeden: kost geld, minder honger en meer energie
-// als hij al bijna geen honger had eet hij te veel, dan gaat zijn gezondheid omlaag
-function voeden() {
+// de slaap geluidjes laten herhalen zolang hij slaapt
+// isPlaying() is true als het geluid al speelt, dan hoeven we niet opnieuw te beginnen
+function slaapGeluidje() {
+  if (slaapt && dood == false) {
+    if (slaapGeluid.isPlaying() == false) {
+      slaapGeluid.loop();
+    }
+  } else if (slaapGeluid.isPlaying()) {
+    slaapGeluid.stop();
+  }
+}
+
+// de eet minigame starten, dat kost geld
+function startEten() {
   if (geld < etenPrijs) {
     toonMelding("Niet genoeg geld! Probeer een kraslot.");
     return;
   }
   geld = geld - etenPrijs;
 
-  if (huisdier.honger < 20) {
-    huisdier.gezondheid = huisdier.gezondheid - 15;
+  vallendEten = [];
+  etenNogTeVallen = etenPerPotje;
+  etenGevangen = 0;
+  volgendEtenTijd = millis();
+  scherm = "eten";
+}
+
+// het scherm van de eet minigame
+function tekenEetScherm() {
+  // het huisdier volgt de muis, constrain zodat hij niet uit beeld loopt
+  etenX = constrain(mouseX, 110, width - 110);
+  tekenHuisdier(etenX);
+
+  // tijd voor iets nieuws? dan laten we het bovenaan op een random plek vallen
+  if (etenNogTeVallen > 0 && millis() > volgendEtenTijd) {
+    vallendEten.push({
+      x: random(60, width - 60),
+      y: -20,
+      symbool: random(etenSymbolen),
+      // random() zonder getal geeft iets tussen 0 en 1
+      vies: random() < viesKans,
+    });
+    etenNogTeVallen = etenNogTeVallen - 1;
+    volgendEtenTijd = millis() + etenTussenTijd;
+  }
+
+  // alles laten vallen en tekenen
+  // we gaan achteruit door de array, want met splice halen we er dingen uit
+  // als je vooruit gaat sla je dan per ongeluk een ding over
+  textAlign(CENTER, CENTER);
+  textSize(40);
+  for (let i = vallendEten.length - 1; i >= 0; i--) {
+    let eten = vallendEten[i];
+    eten.y = eten.y + etenSnelheid;
+
+    if (eten.vies) {
+      text(viesSymbool, eten.x, eten.y);
+    } else {
+      text(eten.symbool, eten.x, eten.y);
+    }
+
+    if (opgevangen(eten)) {
+      eetHap(eten);
+      vallendEten.splice(i, 1);
+    } else if (eten.y > height + 30) {
+      // onderaan uit beeld, dan is hij gemist
+      vallendEten.splice(i, 1);
+    }
+  }
+
+  // uitleg en hoeveel je al hebt gevangen
+  noStroke();
+  fill(0, 150);
+  rect(width / 2 - 220, 15, 440, 60, 10);
+  fill(255);
+  textSize(18);
+  text("Vang het eten met de muis! Pas op voor " + viesSymbool, width / 2, 35);
+  textSize(15);
+  text("Gevangen: " + etenGevangen + "   Nog " + (etenNogTeVallen + vallendEten.length) + " te gaan", width / 2, 58);
+
+  tekenKnop("Stoppen", knopX(2), knopY);
+
+  // niks meer te vallen en alles is beneden? dan is het potje klaar
+  if (etenNogTeVallen == 0 && vallendEten.length == 0) {
+    toonMelding("Lekker! " + etenGevangen + " hapjes gegeten.");
+    scherm = "huisdier";
+  }
+}
+
+// true als het eten bij de mond van het huisdier is
+// de mond zit ongeveer 60 tot 150 pixels boven zijn voeten
+function opgevangen(eten) {
+  return (
+    eten.y > huisdierVoetY - 150 &&
+    eten.y < huisdierVoetY - 60 &&
+    abs(eten.x - etenX) < 70
+  );
+}
+
+// wat er gebeurt als hij iets vangt
+// lekker eten: minder honger en meer energie
+// als hij al bijna geen honger had eet hij te veel, dan gaat zijn gezondheid omlaag
+// iets vies: minder gezondheid
+function eetHap(eten) {
+  if (eten.vies) {
+    huisdier.gezondheid = huisdier.gezondheid - 10;
     // nu + 3000 is over 3 seconden
     misselijkTot = millis() + 3000;
-    toonMelding("Bah, te veel gegeten...");
+    toonMelding("Bah! Dat was vies...");
+  } else {
+    if (huisdier.honger < 10) {
+      huisdier.gezondheid = huisdier.gezondheid - 5;
+      misselijkTot = millis() + 3000;
+      toonMelding("Bah, te veel gegeten...");
+    } else {
+      superblijTot = millis() + 500;
+    }
+    huisdier.honger = huisdier.honger - 8;
+    huisdier.energie = huisdier.energie + 3;
+    etenGevangen = etenGevangen + 1;
+    eetGeluid.play();
   }
-  huisdier.honger = huisdier.honger - 25;
-  huisdier.energie = huisdier.energie + 10;
   begrensStatistieken();
 }
 
-// spelen: meer geluk, maar het kost energie en hij krijgt er honger van
-function spelen() {
+// de speel minigame starten
+// spelen kost energie en hij krijgt er honger van
+function startSpelen() {
   if (huisdier.energie < 15) {
     toonMelding(huisdierNaam + " is te moe om te spelen.");
     return;
   }
-  huisdier.geluk = huisdier.geluk + 15;
   huisdier.energie = huisdier.energie - 15;
   huisdier.honger = huisdier.honger + 5;
   begrensStatistieken();
+
+  // de bal begint in het midden en gaat een random kant op
+  bal.x = width / 2;
+  bal.y = 200;
+  bal.snelheidX = random([-4, 4]);
+  bal.snelheidY = random([-3, 3]);
+  speelScore = 0;
+  speelEindTijd = millis() + speelDuur;
+  scherm = "spelen";
+}
+
+// het scherm van de speel minigame
+function tekenSpeelScherm() {
+  tekenHuisdier(huisdierX);
+
+  // de bal bewegen
+  bal.x = bal.x + bal.snelheidX;
+  bal.y = bal.y + bal.snelheidY;
+
+  // tegen de rand? dan de andere kant op
+  // * -1 maakt van 4 een -4 en van -4 een 4
+  let straal = bal.grootte / 2;
+  if (bal.x < straal || bal.x > width - straal) {
+    bal.snelheidX = bal.snelheidX * -1;
+  }
+  if (bal.y < balBoven + straal || bal.y > balOnder - straal) {
+    bal.snelheidY = bal.snelheidY * -1;
+  }
+
+  // rode bal met een witte streep
+  fill("#e63946");
+  stroke(0);
+  strokeWeight(3);
+  circle(bal.x, bal.y, bal.grootte);
+  stroke(255);
+  line(bal.x - straal + 5, bal.y, bal.x + straal - 5, bal.y);
+  noStroke();
+
+  // hoeveel seconden nog, ceil rondt naar boven af zodat je geen 0 ziet als er nog tijd is
+  let secondenOver = ceil((speelEindTijd - millis()) / 1000);
+
+  fill(0, 150);
+  rect(width / 2 - 200, 15, 400, 60, 10);
+  fill(255);
+  textSize(18);
+  textAlign(CENTER, CENTER);
+  text("Klik zo vaak mogelijk op de bal!", width / 2, 35);
+  textSize(15);
+  text("Raak: " + speelScore + "   Tijd: " + secondenOver, width / 2, 58);
+
+  tekenKnop("Stoppen", knopX(2), knopY);
+
+  if (millis() > speelEindTijd) {
+    toonMelding("Klaar! " + speelScore + " keer raak, +" + speelScore * gelukPerRaak + " geluk");
+    scherm = "huisdier";
+  }
+}
+
+// true als de muis op de bal staat
+function muisOpBal() {
+  return dist(mouseX, mouseY, bal.x, bal.y) < bal.grootte / 2;
+}
+
+// raak! meer geluk en de bal gaat steeds een beetje sneller
+function raakBal() {
+  speelScore = speelScore + 1;
+  huisdier.geluk = huisdier.geluk + gelukPerRaak;
+  begrensStatistieken();
+  superblijTot = millis() + 500;
+  bal.snelheidX = bal.snelheidX * 1.15;
+  bal.snelheidY = bal.snelheidY * 1.15;
 }
 
 // slapen kan alleen als hij een beetje moe is
@@ -431,11 +665,17 @@ function nieuwHuisdier() {
 // kiest het gezicht dat past bij hoe het huisdier zich voelt
 // bovenaan staat wat het belangrijkst is, de eerste die klopt wint
 // bijvoorbeeld: als hij slaapt zie je altijd het slaap gezicht, ook als hij honger heeft
+// als het gezicht verandert en het nieuwe gezicht heeft een geluid, dan hoor je dat 1 keer
 function kiesExpressie() {
+  // onthouden welk gezicht het was, zo kunnen we straks zien of het veranderd is
+  let vorigeExpressie = huidigeExpressie;
+
   if (slaapt) {
     huidigeExpressie = "slapen";
   } else if (millis() < misselijkTot) {
     huidigeExpressie = "misselijk";
+  } else if (millis() < superblijTot) {
+    huidigeExpressie = "superblij";
   } else if (huisdier.gezondheid < 30) {
     huidigeExpressie = "ziek";
   } else if (huisdier.honger > 70 && huisdier.geluk < 30) {
@@ -452,6 +692,16 @@ function kiesExpressie() {
     huidigeExpressie = "superblij";
   } else {
     huidigeExpressie = "blij";
+  }
+
+  // undefined betekent dat dit gezicht geen geluid heeft
+  // als hij dood is hoor je niks meer
+  if (
+    huidigeExpressie != vorigeExpressie &&
+    geluiden[huidigeExpressie] != undefined &&
+    dood == false
+  ) {
+    geluiden[huidigeExpressie].play();
   }
 }
 
@@ -486,7 +736,7 @@ function tekenHuisdierScherm() {
     rect(0, 0, width, height);
   }
 
-  tekenHuisdier();
+  tekenHuisdier(huisdierX);
   tekenNaam();
   tekenStatistieken();
 
@@ -502,17 +752,18 @@ function tekenHuisdierScherm() {
   }
 }
 
-// tekent het huisdier met de voeten op huisdierVoetY en in het midden van huisdierX
-function tekenHuisdier() {
+// tekent het huisdier met de voeten op huisdierVoetY en met zijn midden op x
+// meestal is x gewoon huisdierX, maar bij de eet minigame loopt hij heen en weer
+function tekenHuisdier(x) {
   let plaatje = expressies[huidigeExpressie];
   let breedte = plaatje.width * huisdierSchaal;
   let hoogte = plaatje.height * huisdierSchaal;
 
-  // x - breedte / 2 zodat het midden van het plaatje op huisdierX staat
+  // x - breedte / 2 zodat het midden van het plaatje op x staat
   // voetY - hoogte zodat de onderkant van het plaatje op voetY staat
   image(
     plaatje,
-    huisdierX - breedte / 2,
+    x - breedte / 2,
     huisdierVoetY - hoogte,
     breedte,
     hoogte,
@@ -567,7 +818,7 @@ function startSchieten() {
 // het scherm waar je op je huisdier richt
 // je ziet een rood vizier op de plek van de muis
 function tekenSchietScherm() {
-  tekenHuisdier();
+  tekenHuisdier(huisdierX);
 
   // uitleg bovenaan
   noStroke();
@@ -879,7 +1130,7 @@ function startWassen() {
       x: random(huisdierX - 70, huisdierX + 70),
       y: random(huisdierVoetY - 150, huisdierVoetY - 30),
       grootte: random(30, 50),
-      vuil: 100,
+      vuil: 60,
     });
   }
   scherm = "wassen";
@@ -887,7 +1138,7 @@ function startWassen() {
 
 // het scherm van de was minigame
 function tekenWasScherm() {
-  tekenHuisdier();
+  tekenHuisdier(huisdierX);
   schrobben();
 
   // alle vlekken tekenen
@@ -976,7 +1227,7 @@ function tekenNaamScherm() {
   fill(0, 100);
   rect(0, 0, width, height);
 
-  tekenHuisdier();
+  tekenHuisdier(huisdierX);
 
   fill(255);
   stroke(0);
@@ -1064,6 +1315,9 @@ function tekenDoodScherm() {
 // p5 roept keyPressed() 1 keer aan elke keer dat je een toets indrukt
 // key is de toets die je hebt ingedrukt, bijvoorbeeld "a" of "Backspace"
 function keyPressed() {
+  // geluid aanzetten, net als in mousePressed()
+  userStartAudio();
+
   // typen kan alleen op het naam scherm
   if (scherm != "naam") {
     return;
@@ -1092,6 +1346,10 @@ function keyPressed() {
 // p5 roept mousePressed() 1 keer aan elke keer dat je klikt
 // per scherm kijken we op welke knop je klikt en wat er dan moet gebeuren
 function mousePressed() {
+  // de browser laat pas geluid horen nadat je ergens hebt geklikt
+  // userStartAudio() zet het geluid van p5.sound aan bij de eerste klik
+  userStartAudio();
+
   if (scherm == "dood") {
     if (muisOpKnop(knopX(2), knopY)) {
       nieuwHuisdier();
@@ -1107,9 +1365,9 @@ function mousePressed() {
       if (muisOpNaam()) {
         startSchieten();
       } else if (muisOpKnop(knopX(0), knopY)) {
-        voeden();
+        startEten();
       } else if (muisOpKnop(knopX(1), knopY)) {
-        spelen();
+        startSpelen();
       } else if (muisOpKnop(knopX(2), knopY)) {
         startWassen();
       } else if (muisOpKnop(knopX(3), knopY)) {
@@ -1117,6 +1375,18 @@ function mousePressed() {
       } else if (muisOpKnop(knopX(4), knopY)) {
         koopKraslot();
       }
+    }
+  } else if (scherm == "eten") {
+    // stoppen, wat hij al gegeten heeft telt wel mee
+    if (muisOpKnop(knopX(2), knopY)) {
+      scherm = "huisdier";
+    }
+  } else if (scherm == "spelen") {
+    // eerst naar de knop kijken, dan pas naar de bal
+    if (muisOpKnop(knopX(2), knopY)) {
+      scherm = "huisdier";
+    } else if (muisOpBal()) {
+      raakBal();
     }
   } else if (scherm == "kraslot") {
     // pas terug als alle vakjes open zijn, anders ben je je lot kwijt
