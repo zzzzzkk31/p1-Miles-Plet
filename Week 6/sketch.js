@@ -6,7 +6,8 @@
 // wassen is een minigame waarbij je de vlekken van het huisdier afschrobt
 // bij sommige gezichten, bij het eten en tijdens het slapen hoor je een geluidje
 // alles wordt opgeslagen in localStorage, zo begint hij niet steeds opnieuw
-// de tijd loopt ook door als de game dicht is, dus vergeet hem niet
+// de tijd loopt ook door als de game dicht is, maar dan wel langzamer, dus vergeet hem niet
+// het huisdier beweegt anders per gevoel, zo zie je meteen hoe het met hem gaat
 // als je slecht voor hem zorgt en zijn gezondheid 0 wordt, gaat hij dood
 // wil je een andere naam? dan moet je hem eerst doodschieten en een nieuwe nemen
 
@@ -85,6 +86,22 @@ let huisdierVoetY = 400;
 let naamY = huisdierVoetY - 225;
 let naamTekstGrootte = 24;
 
+// hoeveel pixels hij nu van de grond is, dit wordt elke keer berekend in tekenHuisdier()
+// de naam en de vlekken gebruiken dit ook, zodat ze met hem mee bewegen
+let huisdierSprong = 0;
+
+// symbolen die boven het huisdier zweven, per gezicht
+// gezichten die hier niet in staan hebben geen symbool
+let effectSymbolen = {
+  slapen: "💤",
+  superblij: "💖",
+  huilen: "💧",
+  boos: "💢",
+  ziek: "🦠",
+  misselijk: "🤢",
+  honger: "🍖",
+};
+
 // de 4 statistieken van het huisdier, alles gaat van 0 tot 100
 // let op: bij honger is hoog slecht (100 = heel veel honger)
 // bij de andere 3 is hoog juist goed
@@ -108,8 +125,12 @@ let slaapt = false;
 // elke tikTijd milliseconden (1000 = 1 seconde) veranderen de statistieken een beetje
 // laatsteTik is in Date.now() tijd en wordt opgeslagen
 // zo weten we na het opstarten hoe lang je weg was en loopt de tijd door als de game dicht is
-let tikTijd = 1000;
+let tikTijd = 3000;
 let laatsteTik = 0;
+// was je langer dan wegGrens weg (1 minuut)? dan telt er maar 1 tik per wegTikTijd (5 minuten)
+// anders is hij al dood als je even weg bent, nu overleeft hij ook een nacht
+let wegGrens = 1000 * 60;
+let wegTikTijd = 1000 * 60 * 5;
 
 // na te veel eten is hij een paar seconden misselijk
 // misselijkTot is het moment (in millis) waarop dat weer over is
@@ -167,7 +188,7 @@ let krasUitbetaald = false;
 let krasWinst = 0;
 
 // de vuile vlekken voor de was minigame
-// elke vlek is een data-object met x, y, grootte en vuil (100 = vies, 0 = schoon)
+// elke vlek is een data-object met x, y, grootte en vuil (hoe hoger hoe viezer, 0 = schoon)
 let vlekken = [];
 let aantalVlekken = 6;
 
@@ -514,17 +535,29 @@ function tijdVerloop() {
   }
 
   // Date.now() gaat ook door als de game dicht is, millis() niet
-  // zolang er nog een hele tik voorbij is, doen we een tik
+  let tijdWeg = Date.now() - laatsteTik;
   let getikt = false;
-  while (Date.now() - laatsteTik >= tikTijd) {
-    tik();
-    laatsteTik = laatsteTik + tikTijd;
-    getikt = true;
 
-    // dood gegaan terwijl je weg was? dan stoppen, draw() laat het dood scherm zien
-    if (huisdier.gezondheid <= 0) {
-      laatsteTik = Date.now();
-      break;
+  if (tijdWeg > wegGrens) {
+    // je was lang weg, dan doen we de tikken in 1 keer op het langzame tempo
+    let aantalTikken = floor(tijdWeg / wegTikTijd);
+    for (let i = 0; i < aantalTikken; i++) {
+      tik();
+
+      // dood gegaan terwijl je weg was? dan stoppen, draw() laat het dood scherm zien
+      if (huisdier.gezondheid <= 0) {
+        break;
+      }
+    }
+    laatsteTik = Date.now();
+    getikt = true;
+    toonMelding("Je was " + floor(tijdWeg / (1000 * 60)) + " minuten weg!");
+  } else {
+    // zolang er nog een hele tik voorbij is, doen we een tik
+    while (Date.now() - laatsteTik >= tikTijd) {
+      tik();
+      laatsteTik = laatsteTik + tikTijd;
+      getikt = true;
     }
   }
 
@@ -741,14 +774,15 @@ function tekenMelding() {
     return;
   }
   // zwart doorzichtig vak met witte tekst erin
+  // het begint op 280, rechts van het vak met de statistieken
   noStroke();
   fill(0, 180);
-  rect(width / 2 - 200, 20, 400, 40, 10);
+  rect(280, 20, 400, 40, 10);
 
   fill(255);
   textSize(18);
   textAlign(CENTER, CENTER);
-  text(melding, width / 2, 40);
+  text(melding, 480, 40);
 }
 
 // het gewone scherm met het huisdier, de statistieken en de knoppen
@@ -783,15 +817,72 @@ function tekenHuisdier(x) {
   let breedte = plaatje.width * huisdierSchaal;
   let hoogte = plaatje.height * huisdierSchaal;
 
+  // blij springt op en neer, boos trilt en ziek of verdrietig wiebelt langzaam heen en weer
+  let springHoogte = 0;
+  let springSnelheid = 0;
+  let schudAfstand = 0;
+  let schudSnelheid = 0;
+  if (huidigeExpressie == "superblij") {
+    springHoogte = 12;
+    springSnelheid = 0.2;
+  } else if (huidigeExpressie == "blij") {
+    springHoogte = 5;
+    springSnelheid = 0.08;
+  } else if (huidigeExpressie == "boos") {
+    schudAfstand = 3;
+    schudSnelheid = 0.8;
+  } else if (
+    huidigeExpressie == "ziek" ||
+    huidigeExpressie == "misselijk" ||
+    huidigeExpressie == "huilen" ||
+    huidigeExpressie == "verdrietig"
+  ) {
+    schudAfstand = 6;
+    schudSnelheid = 0.05;
+  }
+
+  // sin() gaat steeds heen en weer tussen -1 en 1, net als bij de zwevende vormen van week 4
+  // abs() maakt alles positief, zo komt hij bij het springen niet onder de grond
+  huisdierSprong = abs(sin(frameCount * springSnelheid)) * springHoogte;
+  let schud = sin(frameCount * schudSnelheid) * schudAfstand;
+  // hij ademt altijd, hij wordt steeds een klein beetje hoger en lager
+  let ademHoogte = hoogte * (1 + sin(frameCount * 0.05) * 0.02);
+
   // x - breedte / 2 zodat het midden van het plaatje op x staat
   // voetY - hoogte zodat de onderkant van het plaatje op voetY staat
   image(
     plaatje,
-    x - breedte / 2,
-    huisdierVoetY - hoogte,
+    x - breedte / 2 + schud,
+    huisdierVoetY - ademHoogte - huisdierSprong,
     breedte,
-    hoogte,
+    ademHoogte,
   );
+
+  tekenEffect(x, huisdierVoetY - hoogte - huisdierSprong);
+}
+
+// laat 3 symbolen naast zijn hoofd omhoog zweven die steeds doorzichtiger worden
+// x en y zijn het midden van de bovenkant van het huisdier
+function tekenEffect(x, y) {
+  let symbool = effectSymbolen[huidigeExpressie];
+
+  // undefined betekent dat dit gezicht geen symbool heeft
+  if (symbool == undefined) {
+    return;
+  }
+
+  noStroke();
+  textAlign(CENTER, CENTER);
+  textSize(24);
+  for (let i = 0; i < 3; i++) {
+    // % 120 telt steeds van 0 tot 120 en begint dan opnieuw
+    // i * 40 zodat de symbolen niet allemaal tegelijk beginnen
+    let stap = (frameCount + i * 40) % 120;
+    fill(255, map(stap, 0, 120, 255, 0));
+    text(symbool, x + 85 + i * 25, y + 40 - stap * 0.5);
+  }
+  // weer helemaal zichtbaar maken, anders wordt de tekst hierna ook doorzichtig
+  fill(255);
 }
 
 // de tekst boven zijn hoofd
@@ -816,7 +907,7 @@ function tekenNaam() {
   strokeWeight(4);
   textSize(naamTekstGrootte);
   textAlign(CENTER, CENTER);
-  text(naamTekst(), huisdierX, naamY);
+  text(naamTekst(), huisdierX, naamY - huisdierSprong);
   noStroke();
 }
 
@@ -1172,7 +1263,7 @@ function tekenWasScherm() {
     let vlek = vlekken[i];
     if (vlek.vuil > 0) {
       fill(110, 75, 35, map(vlek.vuil, 0, 100, 0, 220));
-      circle(vlek.x, vlek.y, vlek.grootte);
+      circle(vlek.x, vlek.y - huisdierSprong, vlek.grootte);
     }
   }
 
@@ -1353,7 +1444,9 @@ function keyPressed() {
     huisdierNaam = huisdierNaam.substring(0, huisdierNaam.length - 1);
   } else if (key == "Enter") {
     // alleen verder als je wel iets hebt getypt
+    // trim() haalt de spaties aan het begin en eind weg, zo is een naam van alleen spaties leeg
     // vandaag wordt zijn verjaardag
+    huisdierNaam = trim(huisdierNaam);
     if (huisdierNaam.length > 0) {
       zetVerjaardag();
       scherm = "huisdier";
@@ -1432,5 +1525,8 @@ function mousePressed() {
   }
 
   // na elke klik opslaan, zo ben je je geld en acties nooit kwijt
-  opslaan();
+  // niet op het naam scherm, anders wordt een half getypte naam zonder verjaardag opgeslagen
+  if (scherm != "naam") {
+    opslaan();
+  }
 }
